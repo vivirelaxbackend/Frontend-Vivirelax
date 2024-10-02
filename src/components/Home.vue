@@ -1,50 +1,27 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import ImgCarrousel from '../assets/Vivirelax-carrousel.png';
+import ImgCarrousel2 from '../assets/Vivirelax-carrousel2.png';
+import ImgCarrousel3 from '../assets/Vivirelax-carrousel3.png';
 
 // Router for navigation
 const router = useRouter()
-
-// Function to navigate to other pages
+const slide = ref(1);
+const autoplay = true;
 </script>
 
 <template>
-  <q-page class="q-pa-md">
-
-    <!-- Welcome Banner -->
-    <div class="text-h4 q-mb-lg">
-      Welcome to MyApp!
-    </div>
-
-    <!-- Intro text or content -->
-    <p class="text-body1">
-      This is the homepage of MyApp, built with Quasar and Vue 3. Use the navigation bar to explore the app.
-    </p>
-
-    <!-- Sample content area -->
-    <div class="q-my-lg">
-      <q-card>
-        <q-card-section>
-          <div class="text-h5">
-            Featured Section
-          </div>
-          <p class="text-body2 q-mt-sm">
-            Here you can add some featured content, an introduction to your app, or any other relevant information.
-          </p>
-        </q-card-section>
-
-        <!-- Example button leading to another page -->
-        <q-card-actions align="right">
-          <q-btn flat label="Learn More"" />
-        </q-card-actions>
-      </q-card>
-    </div>
-
-  </q-page>
+  <div class="carousel-container">
+    <q-carousel animated height="700px" v-model="slide" navigation infinite :autoplay="autoplay" arrows transition-prev="slide-right"
+      transition-next="slide-left" @mouseenter="autoplay = false" @mouseleave="autoplay = true" >
+      <q-carousel-slide :name="1"  :img-src="ImgCarrousel"/>
+      <q-carousel-slide :name="2" img-src="https://www.pranaspa.com.co/wp-content/uploads/2022/02/facial-1.jpg" />
+      <q-carousel-slide :name="3" img-src="https://www.bellatriz.com/wp-content/uploads/2022/04/woman-relaxing-in-the-spa-scaled.jpg" />
+    </q-carousel>
+  </div>
 </template>
 
-
-
 <style scoped>
-/* Add custom styles for your Home page here */
+
 </style>
