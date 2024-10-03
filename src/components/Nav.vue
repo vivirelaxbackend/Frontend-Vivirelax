@@ -1,20 +1,53 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStoreTipoServicio } from '../stores/tipo_servicio.js';
+import { useQuasar } from 'quasar';
 
-const mobileMenu = ref(false)
-const isServiciosMenuOpen = ref(false) // Estado para controlar el menú de servicios
+const mobileMenu = ref(false);
+const useTipoServicio = useStoreTipoServicio();
 const router = useRouter();
+const tiposServicio = ref();
+
+const $q = useQuasar();
+
+function notificar(tipo, msg) {
+    $q.notify({
+        type: tipo,
+        message: msg,
+        position: "top",
+    });
+};
+
+async function getInfo() {
+    try {
+        const response = await useTipoServicio.getAll();
+        if (!response) return;
+        if (response.error) {
+            notificar('negative', response.error);
+            return;
+        };
+        tiposServicio.value = response;
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 // Simple navigation function
 const goTo = (page) => {
+    const url = router.resolve({ path: '/tipo-servicio', query: { id: page } }).href;
+    window.open(url, '_blank');
     console.log(`Navigating to ${page}`)
     // Implement your router logic here, e.g., this.$router.push(`/${page}`)
 }
+
+onMounted(async () => {
+    getInfo();
+});
 </script>
 
 <template>
-    <q-layout>
+    <q-layout view="hHh lpR fFf">
         <q-header elevated style="padding: 10px;">
             <q-toolbar>
                 <!-- Logo or Title of the app -->
@@ -31,23 +64,13 @@ const goTo = (page) => {
                 <!-- Dropdown Menu for Servicios with hover functionality -->
                 <q-btn-dropdown flat label="SERVICIOS" class="text-bold" style="color: black;">
                     <q-list>
-                        <q-item clickable v-ripple @click="goTo('masajes')">
-                            <q-item-section>Masajes</q-item-section>
-                        </q-item>
-                        <q-item clickable v-ripple @click="goTo('mascarillas')">
-                            <q-item-section>Mascarillas Corporales</q-item-section>
-                        </q-item>
-                        <q-item clickable v-ripple @click="goTo('limpieza_facial')">
-                            <q-item-section>Limpieza Facial</q-item-section>
-                        </q-item>
-                        <q-item clickable v-ripple @click="goTo('reflexologia')">
-                            <q-item-section>Reflexología Podal</q-item-section>
-                        </q-item>
-                        <q-item clickable v-ripple @click="goTo('desintoxicacion')">
-                            <q-item-section>Desintoxicación Iónica</q-item-section>
+                        <q-item v-for="(servicio, index) in tiposServicio" :key="index" clickable v-ripple
+                            @click="goTo(servicio._id)">
+                            <q-item-section>{{ servicio.nombre_tip }}</q-item-section>
                         </q-item>
                     </q-list>
                 </q-btn-dropdown>
+
 
                 <q-btn flat label="SOBRE NOSOTROS" @click="goTo('info')" class="text-bold" style="color: black;" />
                 <q-btn flat label="CONTÁCTANOS" @click="goTo('contacto')" class="text-bold" style="color: black;" />
