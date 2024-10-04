@@ -36,6 +36,12 @@ async function getInfo() {
   }
 }
 
+const irTipoServicio = (idServicio) => {
+    const url = router.resolve({ path: '/tipo-servicio', query: { id: idServicio } }).href;
+    window.open(url, '_blank');
+    console.log(`Navigating to ${page}`)
+}
+
 onMounted(async () => {
   getInfo();
 });
@@ -45,14 +51,24 @@ onMounted(async () => {
   <div >
     <!-- Carousel seccion -->
     <div class="carousel-container">
-      <q-carousel animated height="700px" v-model="slide" navigation infinite :autoplay="autoplay" arrows
-        transition-prev="slide-right" transition-next="slide-left" @mouseenter="autoplay = false"
-        @mouseleave="autoplay = true">
-        <q-carousel-slide :name="1" :img-src="ImgCarrousel" />
-        <q-carousel-slide :name="2" img-src="https://www.pranaspa.com.co/wp-content/uploads/2022/02/facial-1.jpg" />
-        <q-carousel-slide :name="3"
-          img-src="https://www.bellatriz.com/wp-content/uploads/2022/04/woman-relaxing-in-the-spa-scaled.jpg" />
-      </q-carousel>
+      <q-carousel
+      animated
+      height="100vh" 
+      v-model="slide"
+      navigation
+      infinite
+      :autoplay="autoplay"
+      arrows
+      transition-prev="slide-right"
+      transition-next="slide-left"
+      @mouseenter="autoplay = false"
+      @mouseleave="autoplay = true"
+    >
+      <!-- Aquí ajustamos el tamaño de la imagen para que ocupe el 100% del contenedor -->
+      <q-carousel-slide :name="1" :img-src="ImgCarrousel" class="carousel-slide" />
+      <q-carousel-slide :name="2" img-src="https://www.pranaspa.com.co/wp-content/uploads/2022/02/facial-1.jpg" class="carousel-slide" />
+      <q-carousel-slide :name="3" img-src="https://www.bellatriz.com/wp-content/uploads/2022/04/woman-relaxing-in-the-spa-scaled.jpg" class="carousel-slide" />
+    </q-carousel>
     </div>
 
         <!-- Bienvenida seccion -->
@@ -69,8 +85,8 @@ onMounted(async () => {
     <div class="services-section">
       <h3 class="text-center text-bold">NUESTROS SERVICIOS</h3>
       <div class="services-container">
-        <div v-for="(servicio, index) in servicios.slice(0, 3)" :key="index" class="card">
-          <img :src="servicio.galeria[0]?.url" alt="Imagen del servicio" class="card-img" />
+        <div v-for="(servicio, index) in servicios.slice(0, 3)" :key="index" class="card" @click="irTipoServicio(servicio.idTipoServicio)">
+          <q-img :src="servicio.galeria[0]?.url" alt="Imagen del servicio" class="card-img" />
           <div class="card-body">
             <h4>{{ servicio.nombre_serv }}</h4>
             <p>{{ servicio.descripcion.slice(0, 100) }}...</p>
@@ -87,6 +103,15 @@ onMounted(async () => {
   text-align: center;
   background-color: #f9f9f9;
   padding: 20px;
+}
+
+
+
+.carousel-slide {
+  /* Usamos object-fit: cover para asegurar que la imagen ocupe todo el espacio disponible */
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 
 .spa-title {
@@ -134,11 +159,13 @@ onMounted(async () => {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
 .card:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
 .card-img {

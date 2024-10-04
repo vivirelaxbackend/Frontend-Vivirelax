@@ -1,7 +1,8 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Nav from "../components/Nav.vue";
 import Home from "../components/Home.vue";
-import DetalleTipoServicio from "../components/DetalleTipoServicio.vue"
+import DetalleTipoServicio from "../components/DetalleTipoServicio.vue";
+import DetalleServicio from "../components/DetalleServicio.vue";
 
 const routes = [
   {
@@ -16,6 +17,10 @@ const routes = [
       {
         path: "/tipo-servicio",
         component: DetalleTipoServicio,
+      },
+      {
+        path: "/detalle-servicio",
+        component: DetalleServicio,
       },
     ],
   },

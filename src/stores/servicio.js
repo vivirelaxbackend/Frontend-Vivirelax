@@ -29,7 +29,7 @@ export const useStoreServicio = defineStore(
         // Obtener servicio por ID
         const getPorId = async (id) => {
             try {
-                const response = await axios.get(`/${modelo}/buscarId/${id}`);
+                const response = await axios.get(`/${modelo}/${id}`);
                 servicioSeleccionado.value = response.data;
                 estatus.value = response.status;
                 return response.data;

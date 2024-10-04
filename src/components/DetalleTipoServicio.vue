@@ -12,6 +12,7 @@ const idTipoServicio = ref();
 const servicios = ref([]);
 const $q = useQuasar();
 
+
 // Get the name of the selected service type from the store
 const nombreTipoServSelec = ref("");
 
@@ -23,6 +24,13 @@ function notificar(tipo, msg) {
         position: "top",
     });
 };
+
+function formatPrice(price) {
+  if (price) {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+  return price;
+}
 
 // Fetch services for the selected service type
 async function getServiciosPorTipo() {
@@ -66,40 +74,59 @@ onMounted(async () => {
     }
 });
 
-
-
-
 // Navigate to detailed service information
 function verInformacion(idServicio) {
-    router.push({ path: `/servicio/${idServicio}` });
+    console.log("idServicio", idServicio)
+    const url = router.resolve({ path: '/detalle-servicio', query: { id: idServicio } }).href;
+    window.open(url, '_blank');
 }
 </script>
 
 <template>
-    <q-page class="q-pa-md">
+    <q-page class="q-pa-md q-page-bg">
         <!-- Title of the selected service type in the center -->
         <div class="text-center q-mb-md">
-            <h1>{{ nombreTipoServSelec }}</h1>
-            <p class="text-subtitle2 text-bold">¡Explora nuestros servicios y selecciona el que más te guste!</p>
+            <h1 class="service-title">{{ nombreTipoServSelec }}</h1>
+            <p class="text-subtitle2 service-subtitle">¡Explora nuestros servicios y selecciona el que más te guste!</p>
         </div>
 
         <!-- Display service cards in a horizontal layout -->
-        <div class="q-gutter-md ">
-            <q-card v-for="(servicio, index) in serviciosPorTipo" :key="index" class="q-mb-lg"
+        <div class="q-gutter-md q-card-container">
+            <q-card v-for="(servicio, index) in serviciosPorTipo" :key="index" class="q-mb-lg service-card"
                 style="max-width: 1000px; margin: 0; display: flex;">
                 <!-- Card Image with fixed width -->
                 <q-img :src="servicio.galeria[0]?.url || 'https://via.placeholder.com/150'" :alt="servicio.nombre_serv"
-                    class="q-card-img" style="width: 300px; height: auto;" />
-                <q-card-section style="flex: 1; padding-left: 30px;"> 
-                    <div class="text-h5 text-bold">{{ servicio.nombre_serv }}</div>
+                    class="q-card-img" style="width: 300px; height: 100%; object-fit: cover;" />
+                <q-card-section style="flex: 1; padding: 25px;">
+                    <div class="text-h5 service-card-principal-title text-bold">{{ servicio.nombre_serv }}</div>
                     <p>{{ servicio.descripcion.slice(0, 250) }}...</p>
-                    <div class="text-bold text-h6">BENEFICIOS:</div>
-                    <p v-for="(beneficio, i) in servicio.beneficios.slice(0, 3)" :key="i"><q-icon name="check_circle"
-                            color="green" />
-                        {{ beneficio.descrip }}
-                    </p>
+
+                    <div>
+                        <p class="service-card-title text-bold">Beneficios:</p>
+                        <div style="display: flex; flex-direction: column;">
+                            <p v-for="(beneficio, i) in servicio.beneficios.slice(0, 3)" :key="i">
+                                <q-icon name="check_circle" color="green" />
+                                {{ beneficio.descrip }}
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Precio y Duración -->
+                    <div class="service-details">
+                        <div class="service-price">
+                            <q-icon name="monetization_on" color="black" size="20px" />
+                            {{ formatPrice(servicio.precio) }}
+                        </div>
+                        <div class="service-duration">
+                            <q-icon name="schedule" color="black" size="20px" />
+                            {{ servicio.duracion }}
+                        </div>
+                    </div>
+
                     <!-- "Ver información" Button -->
-                    <q-btn label="Más información" class="q-mt-md text-center" @click="verInformacion(servicio._id)" />
+                    <div style="display: flex; justify-content: end;">
+                        <q-btn label="Ver más" class="q-mt-md service-btn text-end" @click="verInformacion(servicio._id)" />
+                    </div>
+
                 </q-card-section>
             </q-card>
         </div>
@@ -107,37 +134,108 @@ function verInformacion(idServicio) {
 </template>
 
 <style scoped>
-.q-page {
+/* Body background and fonts */
+.q-page-bg {
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    padding-bottom: 40px;
+    font-family: 'Lora', serif;
+}
+
+.service-title {
+    font-size: 2.8rem;
+    font-weight: 600;
+    color: #333;
+    letter-spacing: 0.5px;
+}
+
+.service-subtitle {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+.q-card-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 /* Horizontal card styles */
-.q-card {
+.service-card {
     flex-direction: row;
     align-items: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    /* Add some shadow for better visual */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    background-color: white;
+}
+
+.service-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
 /* Adjust image sizing for horizontal layout */
 .q-card-img {
     object-fit: cover;
-    border-radius: 8px 0 0 8px;
+    border-radius: 10px 0 0 10px;
+    height: auto;
+}
+
+.service-card-principal-title{
+    font-size: 2rem;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+/* Service card content styles */
+.service-card-title {
+    font-size: 1.4rem;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.service-btn {
+    background-color: #4a90e2;
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.service-btn:hover {
+    background-color: #357abd;
+}
+
+/* Service details for price and duration */
+.service-details {
+    display: flex;
+    gap: 20px;
+    color: #000000;
+}
+
+.service-price,
+.service-duration {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
 }
 
 /* Responsive styles to adapt to mobile */
 @media (max-width: 600px) {
-    .q-card {
+    .service-card {
         flex-direction: column;
         max-width: 100%;
     }
 
     .q-card-img {
         width: 100%;
-        /* Make the image take full width on mobile */
         height: auto;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .q-card-section {
+        padding: 15px;
     }
 }
 </style>
