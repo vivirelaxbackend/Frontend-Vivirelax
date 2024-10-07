@@ -89,6 +89,18 @@ export const useStoreReserva = defineStore(
             }
         };
 
+        // Generar enlace de WhatsApp para contacto
+        const generarEnlaceWhatsApp = async () => {
+            try {
+                const response = await axios.get(`/${modelo}/contacto`);
+                estatus.value = response.status;
+                return response.data.link;
+            } catch (error) {
+                console.error(error);
+                estatus.value = error.response?.status || 500;
+            }
+        };
+
         return {
             getAll,
             getPorId,
@@ -96,6 +108,7 @@ export const useStoreReserva = defineStore(
             editar,
             activar,
             inactivar,
+            generarEnlaceWhatsApp,
             reservas,
             estatus,
             validacion,

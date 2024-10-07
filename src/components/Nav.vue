@@ -2,10 +2,12 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStoreTipoServicio } from '../stores/tipo_servicio.js';
+import { useStoreReserva } from '../stores/reserva.js';
 import { useQuasar } from 'quasar';
 
 const mobileMenu = ref(false);
 const useTipoServicio = useStoreTipoServicio();
+const useReserva = useStoreReserva();
 const router = useRouter();
 const tiposServicio = ref();
 
@@ -32,6 +34,12 @@ async function getInfo() {
         console.log(error);
     }
 }
+
+async function contactarnos() {
+  const enlaceWhatsApp = await useReserva.generarEnlaceWhatsApp();
+  window.open(enlaceWhatsApp, '_blank'); // Abre el enlace en una nueva pestaña
+}
+
 
 // Simple navigation function
 const goTo = (page) => {
@@ -73,7 +81,7 @@ onMounted(async () => {
 
 
                 <q-btn flat label="SOBRE NOSOTROS" @click="goTo('info')" class="text-bold" style="color: black;" />
-                <q-btn flat label="CONTÁCTANOS" @click="goTo('contacto')" class="text-bold" style="color: black;" />
+                <q-btn flat label="CONTÁCTANOS" @click="contactarnos"class="text-bold" style="color: black;" />
 
                 <!-- Mobile Menu -->
                 <q-btn flat round icon="menu" @click="mobileMenu = !mobileMenu" class="hide-on-desktop" />
@@ -88,7 +96,7 @@ onMounted(async () => {
                     <q-item clickable v-ripple @click="goTo('about')">
                         <q-item-section>About</q-item-section>
                     </q-item>
-                    <q-item clickable v-ripple @click="goTo('contact')">
+                    <q-item clickable v-ripple @click="contactarnos">
                         <q-item-section>Contact</q-item-section>
                     </q-item>
                 </q-list>
