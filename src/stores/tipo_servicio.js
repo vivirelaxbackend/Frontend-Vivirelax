@@ -12,6 +12,7 @@ export const useStoreTipoServicio = defineStore(
         const validacion = ref('');
         const nuevoTipoServicio = ref('');
         const tipoServicioSeleccionado = ref(null);
+        const tipoServicioId = ref('');
 
         // Obtener todos los tipos de servicio
         const getAll = async () => {
@@ -101,6 +102,7 @@ export const useStoreTipoServicio = defineStore(
             validacion,
             nuevoTipoServicio,
             tipoServicioSeleccionado,
+            tipoServicioId,
         };
     },
     {
