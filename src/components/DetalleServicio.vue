@@ -82,7 +82,6 @@ const enviarFormulario = async () => {
     }
   } catch (error) {
     console.log(error);
-    loadingNotify();
     notificar('negative', 'Error al enviar la reserva. Intenta nuevamente.');
   } finally {
     loading.value = false;

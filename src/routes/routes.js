@@ -10,6 +10,7 @@ import TipoServicio from "../components/administrarTablas/TipoServicio.vue";
 import Servicio from "../components/administrarTablas/Servicio.vue";
 import Cliente from "../components/administrarTablas/Cliente.vue";
 import Reserva from "../components/administrarTablas/Reserva.vue";
+import Consulta from "../components/administrarTablas/Consulta.vue";
 
 const routes = [
   {
@@ -43,6 +44,7 @@ const routes = [
           { path: "servicio", component: Servicio },
           { path: "cliente", component: Cliente },
           { path: "reserva", component: Reserva },
+          { path: "consulta", component: Consulta },
         ],
       },
     ],

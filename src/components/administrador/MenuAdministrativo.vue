@@ -4,6 +4,7 @@ import TipoServicio from '../../assets/spa-y-relax.png';
 import Servicio from '../../assets/masaje.png';
 import Cliente from '../../assets/cliente.png';
 import Reserva from '../../assets/reserva.png';
+import Consulta from '../../assets/consulta.png';
 
 const leftDrawerOpen = ref(false);
 
@@ -27,6 +28,9 @@ function toggleLeftDrawer() {
                 </div>
                 <div class="card-info text-uppercase"><router-link class="router" to="/panel-admin/reserva"><img :src="Reserva"
                             alt=""></router-link> Reservas
+                </div>
+                <div class="card-info text-uppercase"><router-link class="router" to="/panel-admin/consulta"><img :src="Consulta"
+                            alt=""></router-link> Consultas
                 </div>
             </div>
             <router-view />
