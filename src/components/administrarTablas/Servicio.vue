@@ -393,7 +393,7 @@ onMounted(() => {
                 <q-card-section class="q-gutter-md scrollable-content">
                     <div v-for="(beneficio, index) in data.beneficios" :key="index" style="display: flex; gap: 10px;">
                         <q-input filled v-model.trim="beneficio.descrip" label="Descripción del beneficio" color="black"
-                            :rules="[val => !!val || 'Ingrese la descripción del beneficio']" type="textarea"  />
+                            :rules="[val => !!val || 'Ingrese la descripción del beneficio']" type="textarea" style="width: 100%;"  />
                         <div style="display: flex; align-items: center;">
                             <q-btn icon="delete" color="negative" @click="removeBeneficio(index)"
                                 style="width: 30px; height: 30px;" />

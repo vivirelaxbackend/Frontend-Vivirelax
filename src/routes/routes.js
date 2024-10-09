@@ -11,6 +11,9 @@ import Servicio from "../components/administrarTablas/Servicio.vue";
 import Cliente from "../components/administrarTablas/Cliente.vue";
 import Reserva from "../components/administrarTablas/Reserva.vue";
 import Consulta from "../components/administrarTablas/Consulta.vue";
+import EditarPerfil from "../components/administrador/EditarPerfil.vue";
+import NuevaContraseña from "../components/administrador/NuevaContraseña.vue";
+import recuperarContra from "../components/recuperarContraseña/RecuperarContrasena.vue";
 
 const routes = [
   {
@@ -40,6 +43,8 @@ const routes = [
         children: [
           { path: "", redirect: "/panel-admin/menu-admin" },
           { path: "menu-admin", component: MenuAdmin },
+          { path: "editar-perfil", component: EditarPerfil },
+          { path: "nueva-contrasena", component: NuevaContraseña },
           { path: "tipo-servicio", component: TipoServicio },
           { path: "servicio", component: Servicio },
           { path: "cliente", component: Cliente },
@@ -49,6 +54,7 @@ const routes = [
       },
     ],
   },
+  { path: "/recuperar-contrasena", component: recuperarContra }
 ];
 
 export const router = createRouter({
