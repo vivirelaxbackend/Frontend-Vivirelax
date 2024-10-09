@@ -14,6 +14,7 @@ import Consulta from "../components/administrarTablas/Consulta.vue";
 import EditarPerfil from "../components/administrador/EditarPerfil.vue";
 import NuevaContraseña from "../components/administrador/NuevaContraseña.vue";
 import recuperarContra from "../components/recuperarContraseña/RecuperarContrasena.vue";
+import InfoSpa from "../components/InfoSpa.vue";
 
 const routes = [
   {
@@ -32,6 +33,10 @@ const routes = [
       {
         path: "/detalle-servicio",
         component: DetalleServicio,
+      },
+      {
+        path: "/sobre-nosotros",
+        component: InfoSpa,
       },
       {
         path: "/login",

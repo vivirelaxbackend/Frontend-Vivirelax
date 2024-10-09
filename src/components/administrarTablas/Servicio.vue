@@ -10,9 +10,11 @@ const useTipoServicio = useStoreTipoServicio();  // Instancia del store de tipos
 const loadingTable = ref(false);
 const loadingModal = ref(false);
 const loadIn_activar = ref(false);
+const loadingGaleria = ref(false);
 const filter = ref("");
 const modal = ref(false);
 const modalBeneficios = ref(false); // Benefits modal
+const modalGaleriaVisible = ref(false);
 const router = useRouter();
 const route = useRoute();
 const $q = useQuasar();
@@ -35,7 +37,6 @@ const data = ref({
     duracion: '',
     beneficios: [{ descrip: '' }],
     idTipoServicio: null,
-    estado: true
 });
 const tiposServicios = ref([]); // Lista de tipos de servicio para el select
 
@@ -110,6 +111,13 @@ async function getServiciosPorTipoServicio(idTipoServicio) {
 const opciones = {
     agregar: () => {
         data.value = {
+            nombre_serv: '',
+            descripcion: '',
+            galeria: [],
+            precio: null,
+            duracion: '',
+            beneficios: [{ descrip: '' }],
+            idTipoServicio: null,
         };
 
         estado.value = 'agregar';
@@ -257,6 +265,12 @@ const in_activar = {
     }
 };
 
+function onFileChange(event) {
+    console.log("soy event", event)
+    const files = event.target.files;
+    subirFotosServicio(files);
+}
+
 function openBeneficiosModal() {
     modalBeneficios.value = true;
 }
@@ -272,6 +286,64 @@ function addBeneficio() {
 function removeBeneficio(index) {
     if (data.value.beneficios.length > 1) {
         data.value.beneficios.splice(index, 1);
+    }
+}
+
+function abrirModalGaleria() {
+    modalGaleriaVisible.value = true;
+}
+
+async function subirFotosServicio(files) {
+    console.log("foto sub", files)
+    if (!files || files.length === 0) return;
+
+    const loadingNotify = $q.notify({
+        message: 'Subiendo imagen...',
+        spinner: true,
+        timeout: 0,
+        position: 'top',
+    });
+
+    try {
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const response = await useServicio.subirGrupoFotos(file);
+
+            loadingNotify();
+
+            console.log("soy response", response)
+            const imagenSubida = {
+                url: response.secure_url,
+                publicId: response.public_id,
+            };
+
+            data.value.galeria.push(imagenSubida);  // Guardamos la imagen en el array
+            console.log("Imagen subida:", imagenSubida);
+        }
+    } catch (error) {
+        console.error("Error al subir las fotos:", error);
+        loadingNotify();
+    }
+}
+
+// Updated function to remove image using publicId (without relying on position)
+function removeImage(publicId) {
+    if (!publicId) {
+        notificar('negative', 'No se pudo encontrar el identificador de la imagen.');
+        return;
+    }
+
+    try {
+        const index = data.value.galeria.findIndex(img => img.publicId === publicId);
+        if (index !== -1) {
+            data.value.galeria.splice(index, 1);
+            console.log("Imagen eliminada de la galería:", publicId);
+        } else {
+            notificar('negative', 'Imagen no encontrada en la galería.');
+        }
+    } catch (error) {
+        console.error('Error al eliminar la imagen:', error);
+        notificar('negative', 'Hubo un error al eliminar la imagen.');
     }
 }
 
@@ -311,17 +383,30 @@ onMounted(() => {
                             color="black" :rules="[val => !!val || 'Digite el nombre']" />
                         <q-input filled v-model.trim="data.descripcion" label="Digite la descripción del servicio"
                             color="black" :rules="[val => !!val || 'Digite la descripción']" type="textarea" />
+                        <div class="form-group">
+                            <p>Seleccione las imágenes del servicio (mínimo 4 fotos, cada foto debe pesar menos de 10MB,
+                                la primera foto será usada como foto principal)
+                            </p>
+                            <input type="file" @change="onFileChange" multiple accept="image/*" />
+                        </div>
+                        <!-- Show uploaded images with a delete option -->
+                        <div class="form-group">
+                            <q-btn color="black" @click="abrirModalGaleria">
+                                Ver Galería de Imágenes
+                            </q-btn>
+                        </div>
                         <q-input filled v-model.number="data.precio" label="Digite el precio del servicio" color="black"
                             :rules="[val => !!val || 'Digite el precio']" type="number" />
                         <q-input filled v-model.trim="data.duracion"
                             label="Digite la duración del servicio (por ejemplo 30 Minutos)" color="black"
                             :rules="[val => !!val || 'Digite la duración']" />
-                        <q-select filled v-model="data.idTipoServicio" label="Seleccione un tipo de servicio"
+                        <q-select filled v-model="data.idTipoServicio" label="Seleccione un tipo de servicio" color="black"
                             :options="tiposServicios" option-value="_id" option-label="nombre_tip" map-options
                             :rules="[val => !!val || 'Seleccione un tipo de servicio']" />
                         <div style="display: flex; flex-direction: column; gap: 15px;">
                             <label>Beneficios:</label>
-                            <q-btn label="Ver Beneficios" color="black" @click="openBeneficiosModal" style="width: 50%;" />
+                            <q-btn label="Ver Beneficios" color="black" @click="openBeneficiosModal"
+                                style="width: 50%;" />
                         </div>
 
 
@@ -393,7 +478,8 @@ onMounted(() => {
                 <q-card-section class="q-gutter-md scrollable-content">
                     <div v-for="(beneficio, index) in data.beneficios" :key="index" style="display: flex; gap: 10px;">
                         <q-input filled v-model.trim="beneficio.descrip" label="Descripción del beneficio" color="black"
-                            :rules="[val => !!val || 'Ingrese la descripción del beneficio']" type="textarea" style="width: 100%;"  />
+                            :rules="[val => !!val || 'Ingrese la descripción del beneficio']" type="textarea"
+                            style="width: 100%;" />
                         <div style="display: flex; align-items: center;">
                             <q-btn icon="delete" color="negative" @click="removeBeneficio(index)"
                                 style="width: 30px; height: 30px;" />
@@ -410,6 +496,35 @@ onMounted(() => {
             </q-card>
         </q-dialog>
 
+        <!-- Modal imágenes -->
+        <q-dialog v-model="modalGaleriaVisible" persistent>
+            <q-card style="min-width: 800px; max-height: 80vh; display: flex; flex-direction: column;">
+
+                <!-- Título fijo -->
+                <q-card-section class="sticky-title">
+                    <div class="q-pt-sm">
+                        <h6 class="text-uppercase text-bold">Galería de Imágenes del Servicio</h6>
+                    </div>
+                </q-card-section>
+
+                <!-- Sección de imágenes con scroll -->
+                <q-card-section class="scrollable-content" style="overflow-y: auto; flex-grow: 1;">
+                    <div class="row q-gutter-md">
+                        <div v-for="(image, index) in data.galeria" :key="index" class="col-3">
+                            <img :src="image.url" alt="Imagen del servicio"
+                                style="width: 100%; height: auto; object-fit: cover;" />
+                            <q-btn color="negative" size="sm" @click="removeImage(image.publicId)">Eliminar</q-btn>
+                        </div>
+                    </div>
+                </q-card-section>
+
+                <!-- Botón fijo -->
+                <q-card-actions class="sticky-footer" align="right">
+                    <q-btn flat label="Cerrar" class="bg-black" style="color: white;" v-close-popup />
+                </q-card-actions>
+
+            </q-card>
+        </q-dialog>
     </main>
 </template>
 
@@ -489,5 +604,37 @@ onMounted(() => {
     background-color: white;
     box-shadow: 0px -2px 8px rgba(0, 0, 0, 0.1);
     /* Añade una sombra sutil */
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.sticky-title {
+    position: sticky;
+    display: flex;
+    justify-content: center;
+    top: 0;
+    background-color: white;
+    /* Aseguramos que el título tenga un fondo visible */
+    z-index: 1;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.scrollable-content {
+    flex-grow: 1;
+    max-height: 60vh;
+    /* Ajusta según el espacio disponible */
+    overflow-y: auto;
+}
+
+.sticky-footer {
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+    /* Fondo blanco para asegurar visibilidad */
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 </style>

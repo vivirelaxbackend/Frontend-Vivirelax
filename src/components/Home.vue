@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router';
 import { useStoreServicio } from '../stores/servicio.js';
 import { useQuasar } from 'quasar';
 import ImgCarrousel from '../assets/Vivirelax-carrousel.png';
-import ImgCarrousel2 from '../assets/Vivirelax-carrousel2.png';
+import ImgCarrousel2 from '../assets/VIVIRELAX-3.jpg';
 import ImgCarrousel3 from '../assets/Vivirelax-carrousel3.png';
 
 const router = useRouter();

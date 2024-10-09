@@ -156,7 +156,7 @@ onBeforeUnmount(() => {
                         </q-list>
                     </q-btn-dropdown>
 
-                    <q-btn flat label="SOBRE NOSOTROS" @click="goTo('info')" class="text-bold" style="color: black; font-size: 1.1rem;" />
+                    <q-btn flat label="SOBRE NOSOTROS" @click="router.push('/sobre-nosotros')" class="text-bold" style="color: black; font-size: 1.1rem;" />
 
                     <!-- Login Button with icon -->
                     <div class="right-side d-none d-lg-flex"> <!-- Ocultar en pantallas menores de 984px -->
@@ -250,6 +250,7 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+
 .navbar {
     display: flex;
     justify-content: space-between;

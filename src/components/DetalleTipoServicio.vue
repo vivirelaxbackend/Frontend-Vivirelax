@@ -26,10 +26,10 @@ function notificar(tipo, msg) {
 };
 
 function formatPrice(price) {
-  if (price) {
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  }
-  return price;
+    if (price) {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+    return price;
 }
 
 // Fetch services for the selected service type
@@ -58,7 +58,7 @@ async function getInfo() {
             notificar('negative', response.error);
             return;
         }
-        servicios.value = response;
+        serviciosPorTipo.value = response;
     } catch (error) {
         console.log(error);
     }
@@ -86,18 +86,19 @@ function verInformacion(idServicio) {
     <q-page class="q-pa-md q-page-bg">
         <!-- Title of the selected service type in the center -->
         <div class="text-center q-mb-md">
-            <h1 class="service-title">{{ nombreTipoServSelec }}</h1>
+            <h1 class="service-title text-uppercase">{{ nombreTipoServSelec }}</h1>
             <p class="text-subtitle2 service-subtitle">¡Explora nuestros servicios y selecciona el que más te guste!</p>
         </div>
 
         <!-- Display service cards in a horizontal layout -->
-        <div class="q-gutter-md q-card-container">
-            <q-card v-for="(servicio, index) in serviciosPorTipo" :key="index" class="q-mb-lg service-card"
-                style="max-width: 1000px; margin: 0; display: flex;">
-                <!-- Card Image with fixed width -->
+        <div class=" q-card-container">
+            <q-card v-for="(servicio, index) in serviciosPorTipo" :key="index" class="q-mb-lg service-card">
+                <!-- Image on the left, filling the entire height and 100% width -->
                 <q-img :src="servicio.galeria[0]?.url || 'https://via.placeholder.com/150'" :alt="servicio.nombre_serv"
-                    class="q-card-img" style="width: 300px; height: 100%; object-fit: cover;" />
-                <q-card-section style="flex: 1; padding: 25px;">
+                    class="q-card-img" />
+
+                <!-- Card content on the right -->
+                <q-card-section class="q-card-content">
                     <div class="text-h5 service-card-principal-title text-bold">{{ servicio.nombre_serv }}</div>
                     <p>{{ servicio.descripcion.slice(0, 250) }}...</p>
 
@@ -124,7 +125,8 @@ function verInformacion(idServicio) {
 
                     <!-- "Ver información" Button -->
                     <div style="display: flex; justify-content: end;">
-                        <q-btn label="Ver más" class="q-mt-md service-btn text-end" @click="verInformacion(servicio._id)" />
+                        <q-btn label="Ver más" class="q-mt-md service-btn text-end"
+                            @click="verInformacion(servicio._id)" />
                     </div>
 
                 </q-card-section>
@@ -156,15 +158,21 @@ function verInformacion(idServicio) {
 }
 
 .q-card-container {
+    width: 100%;
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
+    gap: 30px;
 }
 
 /* Horizontal card styles */
 .service-card {
-    flex-direction: row;
-    align-items: center;
+    width: 80%;
+    display: flex;
+    align-items: stretch;
+    /* Ensure both image and content stretch to the same height */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border-radius: 10px;
@@ -176,20 +184,31 @@ function verInformacion(idServicio) {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* Adjust image sizing for horizontal layout */
+/* Image now uses 100% height and width of the left side */
 .q-card-img {
-    object-fit: cover;
-    border-radius: 10px 0 0 10px;
+    width: 35%;
+    /* Takes up 35% of the card width */
     height: auto;
+    object-fit: cover;
+    /* Ensures the image covers the entire area without distortion */
+    border-radius: 10px 0 0 10px;
 }
 
-.service-card-principal-title{
+/* Content section styles */
+.q-card-content {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.service-card-principal-title {
     font-size: 2rem;
     color: #444;
     margin-bottom: 10px;
 }
 
-/* Service card content styles */
 .service-card-title {
     font-size: 1.4rem;
     color: #444;
