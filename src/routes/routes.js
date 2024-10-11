@@ -15,6 +15,7 @@ import EditarPerfil from "../components/administrador/EditarPerfil.vue";
 import NuevaContraseña from "../components/administrador/NuevaContraseña.vue";
 import recuperarContra from "../components/recuperarContraseña/RecuperarContrasena.vue";
 import InfoSpa from "../components/InfoSpa.vue";
+import Tour360 from "../components/Tour360.vue";
 
 const routes = [
   {
@@ -37,6 +38,10 @@ const routes = [
       {
         path: "/sobre-nosotros",
         component: InfoSpa,
+      },
+      {
+        path: "/video-360",
+        component: Tour360,
       },
       {
         path: "/login",

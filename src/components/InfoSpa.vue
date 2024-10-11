@@ -4,6 +4,7 @@ import Vivirelax from "../assets/Vivirelax-carrousel.png";
 import { useStoreServicio } from "../stores/servicio.js";
 import { useQuasar } from 'quasar';
 import { useRouter } from "vue-router";
+import ImgCarrousel2 from '../assets/vivirelax33.png';
 
 const servicios = ref([]);
 const useServicio = useStoreServicio();
@@ -28,7 +29,7 @@ async function getInfo() {
       notificar('negative', response.error);
       return;
     };
-    servicios.value = response;
+    servicios.value = response.sort(() => Math.random() - 0.5);
   } catch (error) {
     console.log(error);
   }
@@ -48,7 +49,7 @@ onMounted(()=>{
 <template>
     <div class="info-container q-pa-md">
         <!-- Banner section -->
-        <q-img :src="Vivirelax" alt="Spa Banner" class="info-banner" :ratio="16 / 9" />
+        <q-img :src="ImgCarrousel2" alt="Spa Banner" class="info-banner"  />
 
         <!-- About Us Section -->
         <div class="about-section q-mt-xl">
@@ -87,7 +88,7 @@ onMounted(()=>{
                     <q-card-section>
                         <h4 class="service-title">{{ servicio.nombre_serv }}</h4>
                         <p class="service-description">
-                            {{ servicio.descripcion.slice(0, 200) }}..
+                            {{ servicio.descripcion.slice(0, 120) }}..
                         </p>
                     </q-card-section>
                 </q-card>

@@ -400,9 +400,9 @@ onMounted(() => {
                         <q-input filled v-model.trim="data.duracion"
                             label="Digite la duración del servicio (por ejemplo 30 Minutos)" color="black"
                             :rules="[val => !!val || 'Digite la duración']" />
-                        <q-select filled v-model="data.idTipoServicio" label="Seleccione un tipo de servicio" color="black"
-                            :options="tiposServicios" option-value="_id" option-label="nombre_tip" map-options
-                            :rules="[val => !!val || 'Seleccione un tipo de servicio']" />
+                        <q-select filled v-model="data.idTipoServicio" label="Seleccione un tipo de servicio"
+                            color="black" :options="tiposServicios" option-value="_id" option-label="nombre_tip"
+                            map-options :rules="[val => !!val || 'Seleccione un tipo de servicio']" />
                         <div style="display: flex; flex-direction: column; gap: 15px;">
                             <label>Beneficios:</label>
                             <q-btn label="Ver Beneficios" color="black" @click="openBeneficiosModal"
@@ -442,6 +442,18 @@ onMounted(() => {
                         <q-icon name="search" />
                     </template>
                 </q-input>
+            </template>
+
+            <template v-slot:body-cell-descripcion="props">
+                <q-td :props="props" class="descripcion">
+                    <VMenu class="vmenu">
+                        <span class="descripcion">{{ props.row.descripcion }}</span>
+
+                        <template #popper>
+                            <div class="descripVmenu">{{ props.row.descripcion }}</div>
+                        </template>
+                    </VMenu>
+                </q-td>
             </template>
 
             <template v-slot:body-cell-estado="props">
@@ -636,5 +648,24 @@ onMounted(() => {
     /* Fondo blanco para asegurar visibilidad */
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+.descripcion {
+    max-width: 150px;
+    max-height: 20px;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+.vmenu {
+    max-height: 50px;
+}
+
+.descripVmenu {
+    padding: 1rem;
+    word-wrap: break-word;
+    height: fit-content;
+    max-height: 300px;
+    max-width: 300px;
 }
 </style>

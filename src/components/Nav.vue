@@ -156,12 +156,15 @@ onBeforeUnmount(() => {
                         </q-list>
                     </q-btn-dropdown>
 
-                    <q-btn flat label="SOBRE NOSOTROS" @click="router.push('/sobre-nosotros')" class="text-bold" style="color: black; font-size: 1.1rem;" />
+                    <q-btn flat label="SOBRE NOSOTROS" @click="router.push('/sobre-nosotros')" class="text-bold"
+                        style="color: black; font-size: 1.1rem;" />
 
                     <!-- Login Button with icon -->
                     <div class="right-side d-none d-lg-flex"> <!-- Ocultar en pantallas menores de 984px -->
-                        <q-btn v-if="!useUsuario.token" flat label="Contáctanos" class="text-bold" color="black" style="font-size: 1.1rem;"
-                            @click="abrirContactoModal" />
+                        <q-btn flat label="Tour 360°" class="text-bold" color="black" style="font-size: 1.1rem;"
+                            @click="router.push('/video-360')" />
+                        <q-btn v-if="!useUsuario.token" flat label="Contáctanos" class="text-bold" color="black"
+                            style="font-size: 1.1rem;" @click="abrirContactoModal" />
                         <q-btn v-if="useUsuario.token" flat label="Administrar servicios" class="right-btn bg-secondary"
                             id="administrarboton" @click="router.push('/panel-admin')" />
 
@@ -250,13 +253,13 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     transition: height 0.3s ease-in-out, padding 0.3s ease-in-out;
     height: 100%;
+    padding: 5px;
 }
 
 .navbar-shrink {
@@ -279,13 +282,15 @@ onBeforeUnmount(() => {
 
 .navbar-shrink .navbar-menu {
     transform: scale(0.9);
+
     /* Slightly smaller menu items on scroll */
 }
 
 
 .navbar-menu {
     display: flex;
-    gap: 15px;
+    gap: 10px;
+    margin-right: 25px;
 }
 
 .right-btn {

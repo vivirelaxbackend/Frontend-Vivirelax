@@ -85,10 +85,14 @@ function verInformacion(idServicio) {
 <template>
     <q-page class="q-pa-md q-page-bg">
         <!-- Title of the selected service type in the center -->
-        <div class="text-center q-mb-md">
+        <div class="service-header text-center q-mb-md">
             <h1 class="service-title text-uppercase">{{ nombreTipoServSelec }}</h1>
-            <p class="text-subtitle2 service-subtitle">¡Explora nuestros servicios y selecciona el que más te guste!</p>
+            <div class="decorative-bar"></div>
+            <p class="text-subtitle2 service-subtitle">
+                ¡Explora nuestros servicios y selecciona el que más te guste!
+            </p>
         </div>
+
 
         <!-- Display service cards in a horizontal layout -->
         <div class=" q-card-container">
@@ -100,7 +104,7 @@ function verInformacion(idServicio) {
                 <!-- Card content on the right -->
                 <q-card-section class="q-card-content">
                     <div class="text-h5 service-card-principal-title text-bold">{{ servicio.nombre_serv }}</div>
-                    <p>{{ servicio.descripcion.slice(0, 250) }}...</p>
+                    <p>{{ servicio.descripcion.slice(0, 180) }}...</p>
 
                     <div>
                         <p class="service-card-title text-bold">Beneficios:</p>
@@ -122,7 +126,6 @@ function verInformacion(idServicio) {
                             {{ servicio.duracion }}
                         </div>
                     </div>
-
                     <!-- "Ver información" Button -->
                     <div style="display: flex; justify-content: end;">
                         <q-btn label="Ver más" class="q-mt-md service-btn text-end"
@@ -136,125 +139,176 @@ function verInformacion(idServicio) {
 </template>
 
 <style scoped>
-/* Body background and fonts */
+/* Background general y tipografías */
 .q-page-bg {
-    background-color: #f9f9f9;
+    background-color: #f4f4f9;
     min-height: 100vh;
     padding-bottom: 40px;
     font-family: 'Lora', serif;
 }
 
-.service-title {
-    font-size: 2.8rem;
-    font-weight: 600;
-    color: #333;
-    letter-spacing: 0.5px;
+/* Contenedor general de la cabecera de servicio */
+.service-header {
+    background: linear-gradient(135deg, #f3f4f6 0%, #f9fafb 100%);
+    padding: 15px 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 40px;
+    position: relative;
 }
 
+/* Título del servicio */
+.service-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #333;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Barra decorativa debajo del título */
+.decorative-bar {
+    width: 100px;
+    height: 4px;
+    background-color: #4A90E2;
+    margin: 0 auto;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.service-title:hover+.decorative-bar {
+    width: 150px;
+}
+
+/* Subtítulo */
 .service-subtitle {
     font-size: 1.2rem;
     color: #666;
-    margin-bottom: 40px;
+    margin-top: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
 }
 
-.q-card-container {
+/* Decoración visual adicional: sombra flotante */
+.service-header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 100%;
+    height: 100%;
+    background-color: white;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    z-index: 0;
+}
+
+
+/* Contenedor de tarjetas */
+.q-card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    justify-content: center;
+}
+
+/* Estilos de las tarjetas */
+.service-card {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-}
-
-/* Horizontal card styles */
-.service-card {
-    width: 80%;
-    display: flex;
-    align-items: stretch;
-    /* Ensure both image and content stretch to the same height */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border-radius: 10px;
-    background-color: white;
+    background-color: #fff;
 }
 
 .service-card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* Image now uses 100% height and width of the left side */
+/* Imagen dentro de la tarjeta */
 .q-card-img {
-    width: 35%;
-    /* Takes up 35% of the card width */
-    height: auto;
+    width: 100%;
+    height: 200px;
     object-fit: cover;
-    /* Ensures the image covers the entire area without distortion */
-    border-radius: 10px 0 0 10px;
+    border-radius: 10px 10px 0 0;
 }
 
-/* Content section styles */
+/* Contenido de la tarjeta */
 .q-card-content {
-    padding: 25px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    flex-grow: 1;
 }
 
+/* Título de servicio */
 .service-card-principal-title {
-    font-size: 2rem;
-    color: #444;
+    font-size: 1.8rem;
+    color: #333;
     margin-bottom: 10px;
 }
 
+/* Beneficios y detalles del servicio */
 .service-card-title {
-    font-size: 1.4rem;
-    color: #444;
-    margin-bottom: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #555;
 }
 
-.service-btn {
-    background-color: #4a90e2;
-    color: white;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.service-btn:hover {
-    background-color: #357abd;
-}
-
-/* Service details for price and duration */
 .service-details {
     display: flex;
-    gap: 20px;
-    color: #000000;
+    gap: 10px;
+    margin-top: 10px;
+    font-size: 1.1rem;
 }
 
+/* Precio y duración */
 .service-price,
 .service-duration {
     display: flex;
     align-items: center;
-    font-size: 1.1rem;
+    color: #333;
 }
 
-/* Responsive styles to adapt to mobile */
-@media (max-width: 600px) {
+/* Estilos del botón */
+.service-btn {
+    background-color: #4A90E2;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+    align-self: flex-end;
+    margin-top: 15px;
+}
+
+.service-btn:hover {
+    background-color: #357ABD;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
     .service-card {
-        flex-direction: column;
         max-width: 100%;
     }
+}
 
-    .q-card-img {
-        width: 100%;
-        height: auto;
-        border-radius: 10px 10px 0 0;
-    }
-
-    .q-card-section {
-        padding: 15px;
+@media (max-width: 600px) {
+    .service-title {
+        font-size: 2rem;
     }
 }
 </style>

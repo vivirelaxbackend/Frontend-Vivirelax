@@ -56,44 +56,51 @@ function formatearDescripcion(texto) {
 }
 
 const cerrarFormulario = () => {
-  dialogoAbierto.value = false;
+    dialogoAbierto.value = false;
 }
 
 const enviarFormulario = async () => {
     loading.value = true;
-  const data = {
-    mensaje_res: mensaje.value,
-    nombre_res: nombre.value,
-    correo_res: email.value,
-    telefono_res: telefono.value,
-    idServicio: idServicio.value
-  };
+    const data = {
+        mensaje_res: mensaje.value,
+        nombre_res: nombre.value,
+        correo_res: email.value,
+        telefono_res: telefono.value,
+        idServicio: idServicio.value
+    };
 
 
-  try {
-    const response = await useReserva.registro(data);
-    console.log(response);
+    try {
+        const response = await useReserva.registro(data);
+        console.log(response);
 
-    if (useReserva.estatus === 200) {
-      notificar('positive', "Reserva enviada con éxito");
-      limpiar();
-    } else if (useReserva.estatus === 400) {
-      notificar('negative', useReserva.validacion);
+        if (useReserva.estatus === 200) {
+            notificar('positive', "Reserva enviada con éxito");
+            limpiar();
+        } else if (useReserva.estatus === 400) {
+            notificar('negative', useReserva.validacion);
+        }
+    } catch (error) {
+        console.log(error);
+        notificar('negative', 'Error al enviar la reserva. Intenta nuevamente.');
+    } finally {
+        loading.value = false;
     }
-  } catch (error) {
-    console.log(error);
-    notificar('negative', 'Error al enviar la reserva. Intenta nuevamente.');
-  } finally {
-    loading.value = false;
-  }
 };
 
 const limpiar = () => {
-  nombre.value = '';
-  email.value = '';
-  telefono.value = '';
-  mensaje.value = 'Hola, me gustaría solicitar más información sobre este servicio y su disponibilidad. ¿Podrían proporcionarme detalles, por favor?';
-  dialogoAbierto.value = false;
+    nombre.value = '';
+    email.value = '';
+    telefono.value = '';
+    mensaje.value = 'Hola, me gustaría solicitar más información sobre este servicio y su disponibilidad. ¿Podrían proporcionarme detalles, por favor?';
+    dialogoAbierto.value = false;
+}
+
+function formatPrice(price) {
+    if (price) {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+    return price;
 }
 
 onMounted(async () => {
@@ -135,9 +142,9 @@ onMounted(async () => {
             </q-dialog>
 
             <!-- Service Details -->
-            <q-card class=" service-details-card" style="max-width: 900px; margin: 0 auto;">
+            <q-card class="service-details-card" style="max-width: 900px; margin: 0 auto;">
                 <q-card-section>
-                    <div class="text-h2 text-bold text-center">{{ servicio.nombre_serv }}</div>
+                    <p class="text-h2 text-bold text-center text-uppercase">{{ servicio.nombre_serv }}</p>
                     <p class="q-mt-lg" v-html="formatearDescripcion(servicio.descripcion)"></p>
 
                     <!-- Beneficios -->
@@ -150,14 +157,15 @@ onMounted(async () => {
                     </div>
 
                     <!-- Precio y Duración -->
-                    <div class="q-mt-md">
-                        <p><strong>Precio: </strong> {{ servicio.precio }}</p>
+                    <div class="q-mt-md" style="display: flex; gap: 20px;">
+                        <p><strong>Precio: </strong> {{ formatPrice(servicio.precio) }}</p>
                         <p><strong>Duración: </strong> {{ servicio.duracion }}</p>
                     </div>
 
                     <!-- Botón para Reservar -->
                     <div class="text-center">
-                        <q-btn label="Reservar" color="dark" class="q-mt-lg" size="18px" @click="dialogoAbierto = true" />
+                        <q-btn label="Reservar" color="dark" class="q-mt-lg" size="18px"
+                            @click="dialogoAbierto = true" />
                     </div>
 
                 </q-card-section>
@@ -184,8 +192,8 @@ onMounted(async () => {
                             :rules="[val => !!val || 'El nombre es obligatorio']" />
                         <q-input filled v-model="email" color="black" label="Digite su correo electrónico" type="email"
                             :rules="[val => !!val || 'El correo es obligatorio', val => /.+@.+\..+/.test(val) || 'Correo no válido']" />
-                        <q-input filled v-model="telefono" color="black" label="Digite su número telefónico" type="number"
-                            :rules="[val => !!val || 'El teléfono es obligatorio']" />
+                        <q-input filled v-model="telefono" color="black" label="Digite su número telefónico"
+                            type="number" :rules="[val => !!val || 'El teléfono es obligatorio']" />
                     </q-form>
 
                 </q-card-section>
@@ -193,7 +201,8 @@ onMounted(async () => {
                 <!-- Botones del diálogo -->
                 <q-card-actions align="right">
                     <q-btn flat label="Cancelar" color="black" @click="cerrarFormulario" />
-                    <q-btn label="Enviar" color="black" @click="enviarFormulario" :loading="loading" :disabled="loading"/>
+                    <q-btn label="Enviar" color="black" @click="enviarFormulario" :loading="loading"
+                        :disabled="loading" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -206,16 +215,14 @@ onMounted(async () => {
     justify-content: center;
     gap: 10px;
     width: 100%;
+
 }
 
 .collage-image {
-    width: 250px;
-    /* Fijamos el ancho del contenedor */
-    height: 170px;
-    /* Fijamos la altura */
     position: relative;
     overflow: hidden;
     border-radius: 8px;
+    height: 100%;
 }
 
 .collage-image q-img {
@@ -248,17 +255,120 @@ onMounted(async () => {
     pointer-events: none;
 }
 
+/* Estilos generales de la tarjeta de detalles del servicio */
 .service-details-card {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #fefefe 0%, #f8f8f8 100%);
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    transition: box-shadow 0.3s ease;
+}
+
+.service-details-card:hover {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Título del servicio */
+.text-h2 {
+    font-family: 'Lora', serif;
+    font-size: 2.4rem;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* Descripción del servicio */
+p {
+    line-height: 1.7;
+    font-size: 1.1rem;
+    color: #666;
+}
+
+/* Sección de beneficios */
+.service-details-card .text-bold {
+    color: #2c3e50;
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+}
+
+.service-details-card q-icon {
+    margin-right: 8px;
+    vertical-align: middle;
+    color: #28a745;
+    /* Color verde suave que combina con la temática de SPA */
+}
+
+.service-details-card .q-icon {
+    font-size: 1.2rem;
+    margin-right: 10px;
+}
+
+/* Información de precio y duración */
+.q-mt-md strong {
+    color: #444;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.q-mt-md p {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+/* Botón de reservar */
+.text-center .q-btn {
+    background-color: #4a90e2;
+    color: white;
+    border-radius: 8px;
+    font-size: 1rem;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+.text-center .q-btn:hover {
+    background-color: #357abd;
+}
+
+/* Collage de imágenes */
+.image-collage {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f3f3f3;
+
+}
+
+.collage-image {
+    width: 220px;
+    height: 160px;
     border-radius: 8px;
     overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
 }
 
-.q-mt-md {
-    margin-top: 16px;
+.collage-image:hover {
+    transform: scale(1.05);
 }
 
-.q-mt-lg {
-    margin-top: 24px;
+.last-image .overlay-text {
+    font-size: 1.1rem;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 8px 12px;
+    border-radius: 5px;
+}
+
+/* Estilos para la caja del formulario */
+.q-dialog .q-card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+}
+
+.q-dialog .q-input {
+    border-radius: 5px;
+    background-color: #f9f9f9;
 }
 </style>

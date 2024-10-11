@@ -4,7 +4,6 @@ import { useRouter } from 'vue-router';
 import { useStoreServicio } from '../stores/servicio.js';
 import { useQuasar } from 'quasar';
 import ImgCarrousel from '../assets/Vivirelax-carrousel.png';
-import ImgCarrousel2 from '../assets/VIVIRELAX-3.jpg';
 import ImgCarrousel3 from '../assets/Vivirelax-carrousel3.png';
 
 const router = useRouter();
@@ -30,7 +29,7 @@ async function getInfo() {
       notificar('negative', response.error);
       return;
     };
-    servicios.value = response;
+    servicios.value = response.sort(() => Math.random() - 0.5);
   } catch (error) {
     console.log(error);
   }
@@ -85,7 +84,7 @@ onMounted(async () => {
     <div class="services-section">
       <h3 class="text-center text-bold">NUESTROS SERVICIOS</h3>
       <div class="services-container">
-        <div v-for="(servicio, index) in servicios.slice(0, 3)" :key="index" class="card" @click="irTipoServicio(servicio.idTipoServicio)">
+        <div v-for="(servicio, index) in servicios.slice(0,3)" :key="index" class="card" @click="irTipoServicio(servicio.idTipoServicio)">
           <q-img :src="servicio.galeria[0]?.url" alt="Imagen del servicio" class="card-img" />
           <div class="card-body">
             <h4>{{ servicio.nombre_serv }}</h4>
