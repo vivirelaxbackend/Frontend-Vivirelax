@@ -1,10 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import Vivirelax from "../assets/Vivirelax-carrousel.png";
 import { useStoreServicio } from "../stores/servicio.js";
 import { useQuasar } from 'quasar';
 import { useRouter } from "vue-router";
-import ImgCarrousel2 from '../assets/vivirelax33.png';
+import ImgCarrousel2 from '../assets/vivirelax33.jpg';
 
 const servicios = ref([]);
 const useServicio = useStoreServicio();
@@ -12,36 +11,38 @@ const router = useRouter();
 const $q = useQuasar();
 
 function notificar(tipo, msg) {
-  $q.notify({
-    type: tipo,
-    message: msg,
-    position: "top",
-  });
+    $q.notify({
+        type: tipo,
+        message: msg,
+        position: "top",
+    });
 };
 
 
 
 async function getInfo() {
-  try {
-    const response = await useServicio.getAll();
-    if (!response) return;
-    if (response.error) {
-      notificar('negative', response.error);
-      return;
-    };
-    servicios.value = response.sort(() => Math.random() - 0.5);
-  } catch (error) {
-    console.log(error);
-  }
+    try {
+        const response = await useServicio.getAll();
+        if (!response) return;
+        if (response.error) {
+            notificar('negative', response.error);
+            return;
+        };
+        servicios.value = response
+            .filter(servicio => servicio.estado === true && servicio.idTipoServicio?.estado === true)
+            .sort(() => Math.random() - 0.5); 
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const irTipoServicio = (idServicio) => {
-  console.log(idServicio)
+    console.log(idServicio)
     const url = router.resolve({ path: '/tipo-servicio', query: { id: idServicio._id } }).href;
     window.open(url, '_blank');
 }
 
-onMounted(()=>{
+onMounted(() => {
     getInfo();
 })
 </script>
@@ -49,7 +50,7 @@ onMounted(()=>{
 <template>
     <div class="info-container q-pa-md">
         <!-- Banner section -->
-        <q-img :src="ImgCarrousel2" alt="Spa Banner" class="info-banner"  />
+        <q-img :src="ImgCarrousel2" alt="Spa Banner" class="info-banner" />
 
         <!-- About Us Section -->
         <div class="about-section q-mt-xl">
@@ -82,9 +83,10 @@ onMounted(()=>{
         <div class="services-highlights q-mt-xl">
             <h3 class="section-title">Destacados del Spa</h3>
             <div class="services-cards-container q-gutter-md q-mt-md">
-                <q-card flat bordered v-for="(servicio, index) in servicios.slice(2, 5)" :key="index" class="service-card" @click="irTipoServicio(servicio.idTipoServicio)">
+                <q-card flat bordered v-for="(servicio, index) in servicios.slice(2, 5)" :key="index"
+                    class="service-card" @click="irTipoServicio(servicio.idTipoServicio)">
                     <q-img :src="servicio.galeria[0]?.url" alt="Imagen del servicio" class="service-img"
-                    :ratio="4 / 3" />
+                        :ratio="4 / 3" />
                     <q-card-section>
                         <h4 class="service-title">{{ servicio.nombre_serv }}</h4>
                         <p class="service-description">

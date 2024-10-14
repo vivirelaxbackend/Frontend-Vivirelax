@@ -21,6 +21,12 @@ const showProfileModal = ref(false);
 const mostrarModalContacto = ref(false);
 const loading = ref(false);
 const navbarShrink = ref(false);
+const menuVisible = ref(false); // State to manage menu visibility on small screens
+
+function toggleMenu() {
+    menuVisible.value = !menuVisible.value;
+}
+
 
 const $q = useQuasar();
 
@@ -97,7 +103,7 @@ async function getInfo() {
             notificar('negative', response.error);
             return;
         };
-        tiposServicio.value = response;
+        tiposServicio.value = response.filter(tipoServicio => tipoServicio.estado === true);;
     } catch (error) {
         console.log(error);
     }
@@ -116,7 +122,7 @@ const goTo = (page) => {
 }
 
 const handleScroll = () => {
-    if (window.scrollY > 50) { // Change the threshold as per your need
+    if (window.scrollY > 50) { 
         navbarShrink.value = true;
     } else {
         navbarShrink.value = false;
@@ -138,15 +144,20 @@ onBeforeUnmount(() => {
         <q-header :class="{ 'navbar-shrink': navbarShrink }" elevated style="padding: 10px;">
             <q-toolbar class="navbar">
                 <!-- Logo or Title of the app -->
-                <q-toolbar-title class="navbar-title" style="display: flex; align-items: center; padding: 5px;">
-                    <q-img src="../assets/Vivirelax-logo3.png" style="width: 80px; height: auto; cursor: pointer;"
-                        @click="router.push('/home')"></q-img>
-                    <p class="text-bold" style="color: black; margin: 10px 10px; cursor: pointer; font-size: 1.7rem;"
+                <q-toolbar-title class="navbar-title animated-title"
+                    style="display: flex; align-items: center; padding: 5px;">
+                    <q-img src="../assets/Vivirelax-logo3.png" class="animated-logo"
+                        style="width: 80px; height: auto; cursor: pointer;" @click="router.push('/home')"></q-img>
+                    <p class="text-bold animated-title"
+                        style="color: black; margin: 10px 10px; cursor: pointer; font-size: 1.7rem;"
                         @click="router.push('/home')">VIVIRELAX</p>
                 </q-toolbar-title>
 
+                <!-- Hamburger Button (visible only on small screens) -->
+                <q-btn flat round icon="menu" class="hamburger-menu d-lg-none" color="black" @click="toggleMenu" />
+
                 <!-- Navigation Menu -->
-                <div class="navbar-menu">
+                <div class="navbar-menu" :class="{ 'menu-hidden': !menuVisible }">
                     <q-btn-dropdown flat label="SERVICIOS" class="text-bold" style="color: black; font-size: 1.1rem;">
                         <q-list style="padding: 7px;">
                             <q-item v-for="(servicio, index) in tiposServicio" class="spa-service-item" :key="index"
@@ -160,7 +171,7 @@ onBeforeUnmount(() => {
                         style="color: black; font-size: 1.1rem;" />
 
                     <!-- Login Button with icon -->
-                    <div class="right-side d-none d-lg-flex"> <!-- Ocultar en pantallas menores de 984px -->
+                    <div class="right-side">
                         <q-btn flat label="Tour 360°" class="text-bold" color="black" style="font-size: 1.1rem;"
                             @click="router.push('/video-360')" />
                         <q-btn v-if="!useUsuario.token" flat label="Contáctanos" class="text-bold" color="black"
@@ -192,7 +203,7 @@ onBeforeUnmount(() => {
 
         <!-- Modal de Contactanos -->
         <q-dialog v-model="mostrarModalContacto">
-            <q-card style="min-width: 400px">
+            <q-card style="min-width: 300px;">
                 <q-card-section class="text-h6 text-bold text-uppercase">
                     <div class="text-h6 text-bold">Contáctanos</div>
                 </q-card-section>
@@ -303,8 +314,6 @@ onBeforeUnmount(() => {
     gap: 10px;
 }
 
-
-
 .spa-service-item {
     background-color: #f9f9f9;
     border-radius: 10px;
@@ -380,19 +389,64 @@ onBeforeUnmount(() => {
     /* Color más oscuro al pasar el mouse */
 }
 
-@media (max-width: 768px) {
+.animated-logo,
+.animated-title {
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Cuando el navbar se encoja, hacemos que la imagen y el título también cambien de tamaño */
+.navbar-shrink .animated-logo {
+    transform: scale(1);
+    /* Reduce el tamaño de la imagen a un 80% */
+}
+
+.navbar-shrink .animated-title {
+    transform: scale(0.9);
+    /* Reduce el tamaño del título a un 80% */
+    font-size: 1.2rem;
+    /* Ajuste opcional para el tamaño de la fuente */
+}
 
 
-    .navbar-menu {
+/* Hide the hamburger button on large screens */
+.hamburger-menu {
+    display: none;
+}
+
+@media (max-width: 988px) {
+    .navbar {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+    }
+
+    .navbar-menu {
+        display: none;
+        flex-direction: column;
         gap: 10px;
     }
 
-    .navbar-title {
+    .navbar-menu.menu-hidden {
+        display: none;
+    }
+
+    .navbar-menu:not(.menu-hidden) {
+        display: flex;
+    }
+
+    .hamburger-menu {
+        display: block;
+    }
+
+    .right-side {
         flex-direction: column;
-        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .navbar-shrink {
+        height: auto;
+        padding: 5px;
+        transition: none;
     }
 }
 </style>

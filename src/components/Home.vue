@@ -4,7 +4,6 @@ import { useRouter } from 'vue-router';
 import { useStoreServicio } from '../stores/servicio.js';
 import { useQuasar } from 'quasar';
 import ImgCarrousel from '../assets/Vivirelax-carrousel.png';
-import ImgCarrousel3 from '../assets/Vivirelax-carrousel3.png';
 
 const router = useRouter();
 const useServicio = useStoreServicio();
@@ -12,6 +11,12 @@ const slide = ref(1);
 const autoplay = true;
 const servicios = ref([]);
 const $q = useQuasar();
+
+const showMapModal = ref(false);
+
+function toggleMapModal() {
+  showMapModal.value = !showMapModal.value;
+}
 
 function notificar(tipo, msg) {
   $q.notify({
@@ -28,17 +33,21 @@ async function getInfo() {
     if (response.error) {
       notificar('negative', response.error);
       return;
-    };
-    servicios.value = response.sort(() => Math.random() - 0.5);
+    }
+
+    servicios.value = response
+      .filter(servicio => servicio.estado === true && servicio.idTipoServicio?.estado === true)
+      .sort(() => Math.random() - 0.5);
   } catch (error) {
     console.log(error);
   }
 }
 
+
 const irTipoServicio = (idServicio) => {
   console.log(idServicio)
-    const url = router.resolve({ path: '/tipo-servicio', query: { id: idServicio._id } }).href;
-    window.open(url, '_blank');
+  const url = router.resolve({ path: '/tipo-servicio', query: { id: idServicio._id } }).href;
+  window.open(url, '_blank');
 }
 
 onMounted(async () => {
@@ -47,35 +56,29 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div >
+  <div>
     <!-- Carousel seccion -->
     <div class="carousel-container">
-      <q-carousel
-      animated
-      height="100vh" 
-      v-model="slide"
-      navigation
-      infinite
-      :autoplay="autoplay"
-      arrows
-      transition-prev="slide-right"
-      transition-next="slide-left"
-      @mouseenter="autoplay = false"
-      @mouseleave="autoplay = true"
-    >
-      <!-- Aquí ajustamos el tamaño de la imagen para que ocupe el 100% del contenedor -->
-      <q-carousel-slide :name="1" :img-src="ImgCarrousel" class="carousel-slide" />
-      <q-carousel-slide :name="2" img-src="https://www.pranaspa.com.co/wp-content/uploads/2022/02/facial-1.jpg" class="carousel-slide" />
-      <q-carousel-slide :name="3" img-src="https://www.bellatriz.com/wp-content/uploads/2022/04/woman-relaxing-in-the-spa-scaled.jpg" class="carousel-slide" />
-    </q-carousel>
+      <q-carousel animated height="100vh" v-model="slide" navigation infinite :autoplay="autoplay" arrows
+        transition-prev="slide-right" transition-next="slide-left" @mouseenter="autoplay = false"
+        @mouseleave="autoplay = true">
+        <!-- Aquí ajustamos el tamaño de la imagen para que ocupe el 100% del contenedor -->
+        <q-carousel-slide :name="1" :img-src="ImgCarrousel" class="carousel-slide" />
+        <q-carousel-slide :name="2" img-src="https://www.pranaspa.com.co/wp-content/uploads/2022/02/facial-1.jpg"
+          class="carousel-slide" />
+        <q-carousel-slide :name="3"
+          img-src="https://www.bellatriz.com/wp-content/uploads/2022/04/woman-relaxing-in-the-spa-scaled.jpg"
+          class="carousel-slide" />
+      </q-carousel>
     </div>
 
-        <!-- Bienvenida seccion -->
+    <!-- Bienvenida seccion -->
     <div class="header-section">
       <h1 class="spa-title">Bienvenid@ a VIVIRELAX</h1>
       <h2 class="spa-subtitle">Tu escape perfecto para la relajación y el bienestar</h2>
       <p class="spa-description">
-        En ViVIRELAX ofrecemos una variedad de servicios de Relajación y Estética para tu renovación física y espiritual.
+        En ViVIRELAX ofrecemos una variedad de servicios de Relajación y Estética para tu renovación física y
+        espiritual.
         Contamos con personal calificado y productos naturales para asegurar una experiencia de calidad.
       </p>
     </div>
@@ -84,7 +87,8 @@ onMounted(async () => {
     <div class="services-section">
       <h3 class="text-center text-bold">NUESTROS SERVICIOS</h3>
       <div class="services-container">
-        <div v-for="(servicio, index) in servicios.slice(0,3)" :key="index" class="card" @click="irTipoServicio(servicio.idTipoServicio)">
+        <div v-for="(servicio, index) in servicios.slice(0, 4)" :key="index" class="card"
+          @click="irTipoServicio(servicio.idTipoServicio)">
           <q-img :src="servicio.galeria[0]?.url" alt="Imagen del servicio" class="card-img" />
           <div class="card-body">
             <h4>{{ servicio.nombre_serv }}</h4>
@@ -93,6 +97,37 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+
+    <div class="map-preview">
+      <h3 class="text-center text-bold">¿DÓNDE ESTAMOS UBICADOS?</h3>
+      <q-img
+        src="https://maps.googleapis.com/maps/api/staticmap?center=6.633022899999999%2C-73.2239148&markers=6.633022899999999%2C-73.2239148&zoom=17&size=680x200&key=AIzaSyBHEIamPaljiaFeIRJX0TknCEi84x47yfc"
+        alt="Google Maps Location" class="map-image" @click="toggleMapModal" style="cursor: pointer;" />
+
+      <p class="text-center q-mt-lg">Haz clic en el mapa para ver más detalles</p>
+
+      <!-- Name and Address -->
+      <div class="flex-1">
+        <p class="text-uppercase text-bold">Vivirelax</p>
+        <p class="text-uppercase text-bold">Cra. 3 #4-67, Barichara, Santander, Colombia</p>
+      </div>
+    </div>
+
+    <!-- Modal with Embedded Google Map -->
+    <q-dialog v-model="showMapModal">
+      <q-card style="min-width: 600px; min-height: 400px;">
+        <q-card-section>
+          <iframe width="100%" height="400" frameborder="0" style="border:0"
+            :src="'https://www.google.com/maps/embed/v1/place?key=AIzaSyBHEIamPaljiaFeIRJX0TknCEi84x47yfc&center=6.633022899999999%2C-73.2239148&zoom=17&q=Vivirelax'"
+            allowfullscreen>
+          </iframe>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Cerrar" color="negative" @click="toggleMapModal" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -103,8 +138,6 @@ onMounted(async () => {
   background-color: #f9f9f9;
   padding: 20px;
 }
-
-
 
 .carousel-slide {
   /* Usamos object-fit: cover para asegurar que la imagen ocupe todo el espacio disponible */
@@ -137,20 +170,22 @@ onMounted(async () => {
 /* Carousel Styles */
 
 
-/* Services Section Styles */
+/* Servicios Section */
 .services-section {
   padding: 20px;
   background-color: #fff;
 }
 
+/* Usamos grid para que las tarjetas sean más flexibles y responsivas */
 .services-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   margin-top: 20px;
+  gap: 20px;
+  justify-items: center;
 }
 
+/* Estilo de las tarjetas */
 .card {
   width: 100%;
   max-width: 400px;
@@ -162,11 +197,13 @@ onMounted(async () => {
   cursor: pointer;
 }
 
+/* Efecto al pasar el mouse sobre la tarjeta */
 .card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  transform: scale(1.02);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
+/* Imagen de la tarjeta */
 .card-img {
   width: 100%;
   height: 200px;
@@ -186,5 +223,65 @@ onMounted(async () => {
   margin: 8px 0 0;
   font-size: 1rem;
   color: #666;
+}
+
+.map-preview {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.map-image {
+  width: 100%;
+  max-width: 680px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.map-image:hover {
+  transform: scale(1.02);
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Ajustes adicionales para pantallas pequeñas */
+@media (max-width: 768px) {
+  .card-img {
+    height: 150px;
+  }
+
+  .card h4 {
+    font-size: 1.1rem;
+  }
+
+  .card p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    max-width: 100%;
+    /* Tarjetas ocupan todo el ancho disponible en pantallas móviles */
+  }
+
+  .services-section {
+    padding: 10px;
+  }
+
+  .card-img {
+    height: 120px;
+  }
+
+  .card-body {
+    padding: 12px;
+  }
+
+  .card h4 {
+    font-size: 1rem;
+  }
+
+  .card p {
+    font-size: 0.85rem;
+  }
 }
 </style>

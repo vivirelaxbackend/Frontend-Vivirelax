@@ -37,7 +37,7 @@ async function getServiciosPorTipo() {
     try {
         const response = await useServicio.getPorTipoServicio(idTipoServicio.value);
         if (response) {
-            serviciosPorTipo.value = response;
+            serviciosPorTipo.value = response.filter(servicioSalon => servicioSalon.estado === true);;
             if (response.length > 0) {
                 // Set the name of the selected service type
                 nombreTipoServSelec.value = response[0].idTipoServicio.nombre_tip;

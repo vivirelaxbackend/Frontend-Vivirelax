@@ -92,8 +92,9 @@ const login = async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f5f5dc; /* Beige suave */
+  background-color: white; /* Beige suave */
   border-radius: 0.5rem;
+  margin: 0px 10px;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 
               0 4px 6px -2px rgba(0, 0, 0, 0.1);
 }
@@ -142,8 +143,9 @@ const login = async () => {
 }
 
 .signup-link a {
-  color: #a3c093; /* Verde oliva claro */
   text-decoration: none;
+  font-weight: bold;
+  color: black;
 }
 
 .signup-link a:hover {
