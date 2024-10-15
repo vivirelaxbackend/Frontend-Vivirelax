@@ -112,7 +112,7 @@ export const useStoreServicio = defineStore(
           config
         );
 
-        console.log("fotos-cloudinary", response);
+        /* console.log("fotos-cloudinary", response); */
 
         urlImagen.value = response.data.secure_url;
         publicImagen.value = response.data.public_id;

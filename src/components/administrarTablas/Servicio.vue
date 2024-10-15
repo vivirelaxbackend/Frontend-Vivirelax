@@ -126,7 +126,7 @@ const opciones = {
         if (idTipoServicio) {
             data.value.idTipoServicio = idTipoServicio; // Asignar el ID del departamento al campo correspondiente
         }
-        console.log("tipo servicio ID:", data.value.idTipoServicio); // Asegúrate de que el ID esté presente
+        /* console.log("tipo servicio ID:", data.value.idTipoServicio); // Asegúrate de que el ID esté presente */
 
     },
     editar: (info) => {
@@ -138,11 +138,11 @@ const opciones = {
 
 const enviarInfo = {
     agregar: async () => {
-        console.log("dataaa", data.value)
+        /* console.log("dataaa", data.value) */
         loadingModal.value = true;
         try {
 
-            console.log('Datos originales que se enviarán:', data.value);
+            /* console.log('Datos originales que se enviarán:', data.value); */
 
             const dataToSend = {
                 ...data.value,
@@ -151,11 +151,11 @@ const enviarInfo = {
                     : data.value.idTipoServicio
             };
 
-            console.log('Datos procesados que se enviarán:', dataToSend);
+            /* console.log('Datos procesados que se enviarán:', dataToSend); */
 
             const response = await useServicio.registro(dataToSend);
 
-            console.log('Response:', response);
+            /* console.log('Response:', response); */
 
             if (!response || Object.keys(response).length === 0) {
                 notificar('negative', 'La API no devolvió respuesta válida.');
@@ -266,7 +266,7 @@ const in_activar = {
 };
 
 function onFileChange(event) {
-    console.log("soy event", event)
+    /* console.log("soy event", event) */
     const files = event.target.files;
     subirFotosServicio(files);
 }
@@ -294,7 +294,7 @@ function abrirModalGaleria() {
 }
 
 async function subirFotosServicio(files) {
-    console.log("foto sub", files)
+    /* console.log("foto sub", files) */
     if (!files || files.length === 0) return;
 
     const loadingNotify = $q.notify({
@@ -311,14 +311,14 @@ async function subirFotosServicio(files) {
 
             loadingNotify();
 
-            console.log("soy response", response)
+            /* console.log("soy response", response) */
             const imagenSubida = {
                 url: response.secure_url,
                 publicId: response.public_id,
             };
 
             data.value.galeria.push(imagenSubida);  // Guardamos la imagen en el array
-            console.log("Imagen subida:", imagenSubida);
+            /* console.log("Imagen subida:", imagenSubida); */
         }
     } catch (error) {
         console.error("Error al subir las fotos:", error);
@@ -337,7 +337,7 @@ function removeImage(publicId) {
         const index = data.value.galeria.findIndex(img => img.publicId === publicId);
         if (index !== -1) {
             data.value.galeria.splice(index, 1);
-            console.log("Imagen eliminada de la galería:", publicId);
+            /* console.log("Imagen eliminada de la galería:", publicId); */
         } else {
             notificar('negative', 'Imagen no encontrada en la galería.');
         }
@@ -384,8 +384,8 @@ onMounted(() => {
                         <q-input filled v-model.trim="data.descripcion" label="Digite la descripción del servicio"
                             color="black" :rules="[val => !!val || 'Digite la descripción']" type="textarea" />
                         <div class="form-group">
-                            <p>Seleccione las imágenes del servicio (mínimo 4 fotos, cada foto debe pesar menos de 10MB,
-                                la primera foto será usada como foto principal)
+                            <p>Seleccione las imágenes del servicio (cada foto debe pesar menos de 10MB,
+                                la primera foto será usada como foto principal para el servicio)
                             </p>
                             <input type="file" @change="onFileChange" multiple accept="image/*" />
                         </div>

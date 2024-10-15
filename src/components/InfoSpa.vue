@@ -37,7 +37,7 @@ async function getInfo() {
 }
 
 const irTipoServicio = (idServicio) => {
-    console.log(idServicio)
+    /* console.log(idServicio) */
     const url = router.resolve({ path: '/tipo-servicio', query: { id: idServicio._id } }).href;
     window.open(url, '_blank');
 }
@@ -83,7 +83,7 @@ onMounted(() => {
         <div class="services-highlights q-mt-xl">
             <h3 class="section-title">Destacados del Spa</h3>
             <div class="services-cards-container q-gutter-md q-mt-md">
-                <q-card flat bordered v-for="(servicio, index) in servicios.slice(2, 5)" :key="index"
+                <q-card flat bordered v-for="(servicio, index) in servicios.slice(0, 4  )" :key="index"
                     class="service-card" @click="irTipoServicio(servicio.idTipoServicio)">
                     <q-img :src="servicio.galeria[0]?.url" alt="Imagen del servicio" class="service-img"
                         :ratio="4 / 3" />
@@ -106,7 +106,7 @@ onMounted(() => {
 
 .info-banner {
     border-radius: 12px;
-    max-height: 100%;
+    height: 100%;
     object-fit: cover;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }

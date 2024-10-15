@@ -155,7 +155,7 @@ function buscarIndexLocal(id) {
 }
 
 function verServicios(servicio) {
-    console.log(servicio)
+    /* console.log(servicio) */
     router.push({ path: '/panel-admin/servicio', query: { id: servicio._id } }).href;
     useServicio.tipoServicioId = servicio;
 }

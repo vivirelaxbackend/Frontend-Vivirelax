@@ -45,7 +45,7 @@ async function getInfo() {
 
 
 const irTipoServicio = (idServicio) => {
-  console.log(idServicio)
+  /* console.log(idServicio) */
   const url = router.resolve({ path: '/tipo-servicio', query: { id: idServicio._id } }).href;
   window.open(url, '_blank');
 }

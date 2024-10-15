@@ -43,7 +43,7 @@ async function getServiciosPorTipo() {
                 nombreTipoServSelec.value = response[0].idTipoServicio.nombre_tip;
             }
         }
-        console.log(serviciosPorTipo);
+        /* console.log(serviciosPorTipo); */
     } catch (error) {
         console.log(error);
     }
@@ -76,7 +76,7 @@ onMounted(async () => {
 
 // Navigate to detailed service information
 function verInformacion(idServicio) {
-    console.log("idServicio", idServicio)
+    /* console.log("idServicio", idServicio) */
     const url = router.resolve({ path: '/detalle-servicio', query: { id: idServicio } }).href;
     window.open(url, '_blank');
 }

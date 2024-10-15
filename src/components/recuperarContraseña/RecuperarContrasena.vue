@@ -66,7 +66,7 @@ async function enviarCodigo() {
 </script>
 
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid bg-primary">
     <div style="width: 100%;">
       <div class="logo-container">
         <router-link to="/login">

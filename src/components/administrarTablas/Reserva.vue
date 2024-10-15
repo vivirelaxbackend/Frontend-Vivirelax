@@ -65,7 +65,7 @@ async function getInfo() {
     try {
         loadingTable.value = true;
         const response = await useReserva.getAll();
-        console.log("reservas", response);
+        /* console.log("reservas", response); */
         if (!response) return;
         if (response.error) {
             notificar('negative', response.error);

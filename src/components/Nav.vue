@@ -63,7 +63,7 @@ const enviarConsulta = async () => {
 
     try {
         const response = await useConsulta.registro(data);
-        console.log(response);
+        /* console.log(response); */
 
         if (useConsulta.estatus === 200) {
             notificar('positive', "Consulta enviada con éxito");
@@ -118,7 +118,7 @@ async function contactarnos() {
 const goTo = (page) => {
     const url = router.resolve({ path: '/tipo-servicio', query: { id: page } }).href;
     window.open(url, '_blank');
-    console.log(`Navigating to ${page}`);
+    /* console.log(`Navigating to ${page}`); */
 }
 
 const handleScroll = () => {

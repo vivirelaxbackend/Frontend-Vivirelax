@@ -72,7 +72,7 @@ const enviarFormulario = async () => {
 
     try {
         const response = await useReserva.registro(data);
-        console.log(response);
+        /* console.log(response); */
 
         if (useReserva.estatus === 200) {
             notificar('positive', "Reserva enviada con éxito");
@@ -172,7 +172,7 @@ onMounted(async () => {
             </q-card>
         </div>
 
-        <q-dialog v-model="dialogoAbierto" persistent>
+        <q-dialog v-model="dialogoAbierto">
             <q-card style="min-width: 400px">
                 <q-card-section class="text-h6 text-bold text-uppercase">
                     {{ servicio.nombre_serv }}
@@ -180,7 +180,7 @@ onMounted(async () => {
 
                 <q-card-section>
                     <div class="text-subtitle1 text-bold">Pide más información</div>
-                    <p class="text-body2">
+                    <p class="text-body2" style="color: black;">
                         Rellena este formulario y el SPA VIVIRELAX se pondrá en contacto contigo en breve.
                         Todos los datos que envíes serán tratados de forma confidencial.
                     </p>
