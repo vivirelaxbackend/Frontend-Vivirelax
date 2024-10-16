@@ -74,7 +74,7 @@ onMounted(async () => {
 
     <!-- Bienvenida seccion -->
     <div class="header-section">
-      <h1 class="spa-title">Bienvenid@ a VIVIRELAX</h1>
+      <h1 class="spa-title" style=" font-family: 'Poppins', sans-serif;">Bienvenid@ a VIVIRELAX</h1>
       <h2 class="spa-subtitle">Tu escape perfecto para la relajación y el bienestar</h2>
       <p class="spa-description">
         En ViVIRELAX ofrecemos una variedad de servicios de Relajación y Estética para tu renovación física y
@@ -85,7 +85,7 @@ onMounted(async () => {
 
     <!-- Servicios seccion -->
     <div class="services-section">
-      <h3 class="text-center text-bold">NUESTROS SERVICIOS</h3>
+      <h3 class="text-center text-bold" style=" font-family: 'Poppins', sans-serif;">NUESTROS SERVICIOS</h3>
       <div class="services-container">
         <div v-for="(servicio, index) in servicios.slice(0, 4)" :key="index" class="card"
           @click="irTipoServicio(servicio.idTipoServicio)">
@@ -99,7 +99,7 @@ onMounted(async () => {
     </div>
 
     <div class="map-preview">
-      <h3 class="text-center text-bold">¿DÓNDE ESTAMOS UBICADOS?</h3>
+      <h3 class="text-center text-bold" style=" font-family: 'Poppins', sans-serif;">¿DÓNDE ESTAMOS UBICADOS?</h3>
       <q-img
         src="https://maps.googleapis.com/maps/api/staticmap?center=6.633022899999999%2C-73.2239148&markers=6.633022899999999%2C-73.2239148&zoom=17&size=680x200&key=AIzaSyBHEIamPaljiaFeIRJX0TknCEi84x47yfc"
         alt="Google Maps Location" class="map-image" @click="toggleMapModal" style="cursor: pointer;" />

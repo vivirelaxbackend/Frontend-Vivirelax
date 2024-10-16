@@ -9,6 +9,7 @@ const password = ref("");
 const showPassword = ref(false); // New ref for toggling password visibility
 const useUsuario = useStoreUsuarios();
 const router = useRouter();
+const loading = ref(false);
 const isCleaning = ref(false);
 const $q = useQuasar();
 
@@ -21,6 +22,7 @@ function notificar(tipo, msg) {
 }
 
 const login = async () => {
+  loading.value = true;
     const data = {
         cedula: cedula.value,
         password: password.value,
@@ -39,6 +41,8 @@ const login = async () => {
     } catch (error) {
         console.log(error);
         notificar('negative', 'Usuario o contraseña incorrectos');
+    } finally{
+      loading.value = false;
     }
 };
 </script>
@@ -62,7 +66,7 @@ const login = async () => {
                     </q-input>
                 </div>
                 <div class="q-pt-md">
-                    <q-btn type="submit" color="black" class="submit">Ingresar</q-btn>
+                    <q-btn type="submit" color="black" class="submit" :loading="loading" :disable="loading">Ingresar</q-btn>
                 </div>
             </q-form>
             <p class="signup-link">

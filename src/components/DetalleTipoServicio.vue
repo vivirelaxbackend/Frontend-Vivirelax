@@ -172,7 +172,7 @@ function verInformacion(idServicio) {
 .decorative-bar {
     width: 100px;
     height: 4px;
-    background-color: #4A90E2;
+    background-color: #68a5be;
     margin: 0 auto;
     border-radius: 2px;
     transition: width 0.3s ease;
@@ -286,7 +286,7 @@ function verInformacion(idServicio) {
 
 /* Estilos del botón */
 .service-btn {
-    background-color: #4A90E2;
+    background-color: #357ABD;
     color: white;
     border-radius: 5px;
     padding: 10px 20px;
@@ -296,7 +296,7 @@ function verInformacion(idServicio) {
 }
 
 .service-btn:hover {
-    background-color: #357ABD;
+    background-color: #4d6f1c;
 }
 
 /* Estilos responsivos */

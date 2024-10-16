@@ -144,7 +144,7 @@ onMounted(async () => {
             <!-- Service Details -->
             <q-card class="service-details-card" style="max-width: 900px; margin: 0 auto;">
                 <q-card-section>
-                    <p class="text-h2 text-bold text-center text-uppercase">{{ servicio.nombre_serv }}</p>
+                    <p class="text-h3 text-bold text-center text-uppercase">{{ servicio.nombre_serv }}</p>
                     <p class="q-mt-lg" v-html="formatearDescripcion(servicio.descripcion)"></p>
 
                     <!-- Beneficios -->
@@ -343,7 +343,7 @@ p {
 
 .collage-image {
     width: 220px;
-    height: 160px;
+    height: 100%;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);

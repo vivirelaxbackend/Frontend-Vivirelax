@@ -369,7 +369,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <main style="width: 100%; display: flex; justify-content: center;">
+    <main style=" width: 100%; display: flex; justify-content: center; flex-direction: column; align-items: center;">
         <!-- Modal -->
         <q-dialog v-model="modal">
             <q-card class="modal" style="width: 500px;">
@@ -405,8 +405,8 @@ onMounted(() => {
                             map-options :rules="[val => !!val || 'Seleccione un tipo de servicio']" />
                         <div style="display: flex; flex-direction: column; gap: 15px;">
                             <label>Beneficios:</label>
-                            <q-btn label="Ver Beneficios" color="black" @click="openBeneficiosModal"
-                                style="width: 50%;" />
+                            <q-btn color="black" @click="openBeneficiosModal" style="width: 50%;">{{ estado ===
+                                'agregar' ? 'Agregar' : 'Editar' }} beneficios</q-btn>
                         </div>
 
 
@@ -478,6 +478,9 @@ onMounted(() => {
                 </q-td>
             </template>
         </q-table>
+
+
+
         <!-- Modal para Administrar Beneficios -->
         <q-dialog v-model="modalBeneficios">
             <q-card class="modal" style="width: 500px;">
@@ -537,6 +540,11 @@ onMounted(() => {
 
             </q-card>
         </q-dialog>
+        <div style="width: 90%;">
+            <button class="btn-back bg-black" @click="router.push('/panel-admin/tipo-servicio')">
+                <i class="fa-solid fa-backward"></i> Volver
+            </button>
+        </div>
     </main>
 </template>
 
@@ -667,5 +675,23 @@ onMounted(() => {
     height: fit-content;
     max-height: 300px;
     max-width: 300px;
+}
+
+.btn-back {
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 9em;
+    height: 55px;
+    border-radius: 15px;
+    font-size: 15px;
+    font-family: inherit;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    color: white;
+    cursor: pointer;
 }
 </style>
