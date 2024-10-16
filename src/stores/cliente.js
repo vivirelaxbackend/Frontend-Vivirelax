@@ -13,7 +13,7 @@ export const useStoreCliente = defineStore(
         const nuevoCliente = ref('');
         const clienteSeleccionado = ref(null);
 
-        // Obtener todos los clientes
+        // Obtener todos los clientes;
         const getAll = async () => {
             try {
                 const response = await axios.get(`/${modelo}/all`);
