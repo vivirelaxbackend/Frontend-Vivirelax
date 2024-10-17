@@ -19,7 +19,9 @@ const mensaje = ref('Hola, me gustaría solicitar más información sobre este s
 const nombre = ref();
 const email = ref();
 const telefono = ref();
+const fecha = ref('');
 const loading = ref(false);
+const minDate = ref(obtenerFechaActual());
 
 // Notify the user
 function notificar(tipo, msg) {
@@ -28,6 +30,11 @@ function notificar(tipo, msg) {
         message: msg,
         position: "top",
     });
+}
+
+function obtenerFechaActual() {
+  const today = new Date();
+  return today.toISOString().split('T')[0];
 }
 
 // Fetch services for the selected service type
@@ -66,6 +73,7 @@ const enviarFormulario = async () => {
         nombre_res: nombre.value,
         correo_res: email.value,
         telefono_res: telefono.value,
+        fecha_res: fecha.value,
         idServicio: idServicio.value
     };
 
@@ -194,6 +202,8 @@ onMounted(async () => {
                             :rules="[val => !!val || 'El correo es obligatorio', val => /.+@.+\..+/.test(val) || 'Correo no válido']" />
                         <q-input filled v-model="telefono" color="black" label="Digite su número telefónico"
                             type="number" :rules="[val => !!val || 'El teléfono es obligatorio']" />
+                        <q-input filled v-model="fecha" color="black" label="Elija la fecha en la que desea su cita" :min="minDate"
+                            type="date"  :rules="[val => !!val || 'La fecha es obligatoria', val => (val >= minDate) || 'La fecha no puede ser anterior a la de hoy.']" />
                     </q-form>
 
                 </q-card-section>

@@ -63,7 +63,8 @@ onMounted(async () => {
         transition-prev="slide-right" transition-next="slide-left" @mouseenter="autoplay = false"
         @mouseleave="autoplay = true">
         <!-- Aquí ajustamos el tamaño de la imagen para que ocupe el 100% del contenedor -->
-        <q-carousel-slide :name="1" :img-src="ImgCarrousel" class="carousel-slide" />
+        <q-carousel-slide :name="1" :img-src="ImgCarrousel" class="carousel-slide"
+          style="background-size: cover;background-position: center;" />
         <q-carousel-slide :name="2" img-src="https://www.pranaspa.com.co/wp-content/uploads/2022/02/facial-1.jpg"
           class="carousel-slide" />
         <q-carousel-slide :name="3"
@@ -115,7 +116,7 @@ onMounted(async () => {
 
     <!-- Modal with Embedded Google Map -->
     <q-dialog v-model="showMapModal">
-      <q-card style="min-width: 600px; min-height: 400px;">
+      <q-card style="min-height: 400px;" full-width>
         <q-card-section>
           <iframe width="100%" height="400" frameborder="0" style="border:0"
             :src="'https://www.google.com/maps/embed/v1/place?key=AIzaSyBHEIamPaljiaFeIRJX0TknCEi84x47yfc&center=6.633022899999999%2C-73.2239148&zoom=17&q=Vivirelax'"

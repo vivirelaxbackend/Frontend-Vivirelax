@@ -114,6 +114,13 @@ async function contactarnos() {
     window.open(enlaceWhatsApp, '_blank');
 }
 
+function goInstagram(){
+    window.open('https://www.instagram.com/barichara.vivirelax28/','_blank');
+}
+
+function goFacebook(){
+    window.open('https://www.facebook.com/people/Vivirelax-Barichara/pfbid0cs2KSGMwypQabjGiVoaSnCGFNu8aU169Nq6cjHdzNmmb6kSfZg6CVCJbsgmyeoMql/?mibextid=LQQJ4d','_blank');
+}
 
 const goTo = (page) => {
     const url = router.resolve({ path: '/tipo-servicio', query: { id: page } }).href;
@@ -122,7 +129,7 @@ const goTo = (page) => {
 }
 
 const handleScroll = () => {
-    if (window.scrollY > 50) { 
+    if (window.scrollY > 50) {
         navbarShrink.value = true;
     } else {
         navbarShrink.value = false;
@@ -196,6 +203,16 @@ onBeforeUnmount(() => {
         <q-page-container>
             <router-view />
         </q-page-container>
+
+        <q-btn v-if="!useUsuario.token" fab class="facebook-btn"
+            @click="goFacebook()">
+            <i class="fa-brands fa-facebook fa-3x"></i>
+        </q-btn>
+
+        <q-btn v-if="!useUsuario.token" fab class="instagram-btn"
+            @click="goInstagram()">
+            <i class="fa-brands fa-instagram fa-3x"></i>
+        </q-btn>
 
         <q-btn v-if="!useUsuario.token" fab class="whatsapp-btn" @click="contactarnos">
             <i class="fa-brands fa-whatsapp fa-3x"></i>
@@ -367,6 +384,42 @@ onBeforeUnmount(() => {
     background-color: black;
 }
 
+.facebook-btn,
+.instagram-btn {
+    position: fixed;
+    right: 20px;
+    z-index: 100;
+    color: white;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.facebook-btn {
+    background-color: #1877F2;
+    /* Color oficial de Facebook */
+    bottom: 140px;
+}
+
+.instagram-btn {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    /* Color oficial de Instagram */
+    bottom: 80px;
+}
+
+.facebook-btn:hover {
+    background-color: #145dbf;
+}
+
+.instagram-btn:hover {
+    background: linear-gradient(45deg, #f9d423, #ff4e50, #e73c7e, #d84a91, #c13584);
+}
+
+
 .whatsapp-btn {
     position: fixed;
     bottom: 20px;
@@ -377,8 +430,8 @@ onBeforeUnmount(() => {
     color: white;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
     border-radius: 50%;
-    width: 80px;
-    height: 80px;
+    width: 30px;
+    height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;

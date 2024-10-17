@@ -14,6 +14,7 @@ const filter = ref("");
 const modal = ref(false);
 const router = useRouter();
 const $q = useQuasar();
+const minDate = ref(obtenerFechaActual());
 
 function notificar(tipo, msg) {
     $q.notify({
@@ -23,6 +24,11 @@ function notificar(tipo, msg) {
     });
 };
 
+function obtenerFechaActual() {
+    const today = new Date();
+    return today.toISOString().split('T')[0];
+}
+
 const estado = ref('agregar');
 const data = ref({});
 const servicios = ref([]); // Lista de servicios que se mostrarán en el q-select
@@ -31,6 +37,19 @@ const columns = [
     { name: "nombre_res", label: "Nombre del cliente", field: "nombre_res", sortable: true, align: "left" },
     { name: "correo_res", label: "Correo del cliente", field: "correo_res", sortable: true, align: "left" },
     { name: "telefono_res", label: "Teléfono del cliente", field: "telefono_res", sortable: true, align: "left" },
+    {
+        name: "fecha_res",
+        label: "Fecha de reserva",
+        field: (row) => {
+            if (!row.fecha_res) return '';
+
+            // Usamos toISOString() y split('T')[0] para asegurarnos que no haya desfase por zona horaria
+            const fecha = new Date(row.fecha_res);
+            return fecha.toISOString().split('T')[0]; // Formatea la fecha a yyyy-MM-dd
+        },
+        sortable: true,
+        align: "center"
+    },
     {
         name: "nombreServicio",
         label: "Servicio",
@@ -52,6 +71,7 @@ async function getServicios() {
         const response = await useServicio.getAll(); // Asumiendo que este método obtiene los servicios
         if (response && !response.error) {
             servicios.value = response; // Guardamos la lista de servicios
+
         } else {
             notificar('negative', 'Error al obtener los servicios');
         }
@@ -96,6 +116,11 @@ const opciones = {
         data.value = { ...info };
         estado.value = 'editar';
         modal.value = true;
+
+        if (info.fecha_res) {
+            const fecha = new Date(info.fecha_res);
+            data.value.fecha_res = fecha.toISOString().split('T')[0]; // Convierte a 'YYYY-MM-DD'
+        }
         // Al editar, aseguramos que el servicio aparezca como seleccionado en el q-select
         data.value.idServicio = info.idServicio ? info.idServicio._id : null;
     }
@@ -104,6 +129,10 @@ const opciones = {
 const enviarInfo = {
     agregar: async () => {
         try {
+            if (data.value.fecha_res) {
+                data.value.fecha_res = new Date(data.value.fecha_res).toISOString(); // Asegura que envíes la fecha en formato ISO
+            }
+
             loadingModal.value = true;
             const response = await useReserva.registro(data.value);
             getInfo();
@@ -123,6 +152,10 @@ const enviarInfo = {
     editar: async () => {
         loadingModal.value = true;
         try {
+            if (data.value.fecha_res) {
+                data.value.fecha_res = new Date(data.value.fecha_res).toISOString(); // Asegura que envíes la fecha en formato ISO
+            }
+
             const response = await useReserva.editar(data.value._id, data.value);
             getInfo();
             if (!response) return;
@@ -203,20 +236,22 @@ function buscarIndexLocal(id) {
                 </q-toolbar>
                 <q-card-section class="q-gutter-md">
                     <q-form @submit="validarCampos" class="q-gutter-md">
-                        <q-input filled v-model.trim="data.nombre_res" label="Digite el nombre del cliente" color="black"
-                            :rules="[val => !!val || 'Digite el nombre']" type="text" />
-                        <q-input filled v-model.trim="data.correo_res" label="Digite el correo del cliente" color="black"
-                            :rules="[val => !!val || 'Digite el correo']" type="email" />
-                        <q-input filled v-model.trim="data.telefono_res" label="Digite el teléfono del cliente" color="black"
-                            :rules="[val => !!val || 'Digite el teléfono']" type="text" />
+                        <q-input filled v-model.trim="data.nombre_res" label="Digite el nombre del cliente"
+                            color="black" :rules="[val => !!val || 'Digite el nombre']" type="text" />
+                        <q-input filled v-model.trim="data.correo_res" label="Digite el correo del cliente"
+                            color="black" :rules="[val => !!val || 'Digite el correo']" type="email" />
+                        <q-input filled v-model.trim="data.telefono_res" label="Digite el teléfono del cliente"
+                            color="black" :rules="[val => !!val || 'Digite el teléfono']" type="text" />
+                        <q-input filled v-model.trim="data.fecha_res" label="Fecha Reserva" color="black" :min="minDate"
+                            :rules="[val => !!val || 'La fecha es obligatoria', val => (val >= minDate) || 'La fecha no puede ser anterior a la de hoy.']"
+                            type="date" />
                         <q-input filled v-model.trim="data.mensaje_res" label="Mensaje" color="black"
                             :rules="[val => !!val || 'Digite un mensaje']" type="textarea" />
                         <q-select v-model="data.idServicio" label="Servicio" color="black"
                             :options="servicios.map(serv => ({ label: serv.nombre_serv, value: serv._id }))" map-options
                             emit-value :rules="[val => !!val || 'Seleccione un servicio']" />
                         <div style="display: flex; width: 96%; justify-content: flex-end;">
-                            <q-btn :loading="loadingModal" padding="10px" type="submit" color="black"
-                                :label="estado" />
+                            <q-btn :loading="loadingModal" padding="10px" type="submit" color="black" :label="estado" />
                         </div>
                     </q-form>
                 </q-card-section>
