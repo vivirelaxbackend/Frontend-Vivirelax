@@ -59,12 +59,9 @@ onMounted(async () => {
   <div>
     <!-- Carousel seccion -->
     <div class="carousel-container">
-      <q-carousel animated height="100vh" v-model="slide" navigation infinite :autoplay="autoplay" arrows
-        transition-prev="slide-right" transition-next="slide-left" @mouseenter="autoplay = false"
-        @mouseleave="autoplay = true">
-        <!-- Aquí ajustamos el tamaño de la imagen para que ocupe el 100% del contenedor -->
-        <q-carousel-slide :name="1" :img-src="ImgCarrousel" class="carousel-slide"
-          style="background-size: cover;background-position: center;" />
+      <q-carousel animated v-model="slide" navigation infinite :autoplay="autoplay" arrows
+        @mouseenter="autoplay = false" @mouseleave="autoplay = true" class="carousel-container">
+        <q-carousel-slide :name="1" :img-src="ImgCarrousel" class="carousel-slide" />
         <q-carousel-slide :name="2" img-src="https://www.pranaspa.com.co/wp-content/uploads/2022/02/facial-1.jpg"
           class="carousel-slide" />
         <q-carousel-slide :name="3"
@@ -140,12 +137,25 @@ onMounted(async () => {
   padding: 20px;
 }
 
-.carousel-slide {
-  /* Usamos object-fit: cover para asegurar que la imagen ocupe todo el espacio disponible */
-  object-fit: cover;
+.carousel-container {
+  position: relative;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
 }
+
+.q-carousel {
+  width: 100%;
+  height: auto;
+}
+
+.q-carousel-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
 
 .spa-title {
   font-size: 2.5rem;
@@ -167,9 +177,6 @@ onMounted(async () => {
   margin-left: auto;
   margin-right: auto;
 }
-
-/* Carousel Styles */
-
 
 /* Servicios Section */
 .services-section {
