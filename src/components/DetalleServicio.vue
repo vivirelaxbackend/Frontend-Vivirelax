@@ -33,8 +33,8 @@ function notificar(tipo, msg) {
 }
 
 function obtenerFechaActual() {
-  const today = new Date();
-  return today.toISOString().split('T')[0];
+    const today = new Date();
+    return today.toISOString().split('T')[0];
 }
 
 // Fetch services for the selected service type
@@ -127,9 +127,8 @@ onMounted(async () => {
             <div class="image-collage q-mb-lg">
                 <div v-for="(img, index) in servicio.galeria.slice(0, 4)" :key="img._id" class="collage-image"
                     @click="openModal(index)">
-
                     <!-- Si no es la última imagen, muestra la imagen normal -->
-                    <q-img v-if="index < 3" :src="img.url" alt="gallery image" />
+                    <q-img v-if="index < 3" :src="img.url" alt="gallery image" class="collage-img" />
 
                     <!-- Si es la última imagen, muestra el overlay con "Ver más" -->
                     <div v-else class="last-image">
@@ -202,8 +201,9 @@ onMounted(async () => {
                             :rules="[val => !!val || 'El correo es obligatorio', val => /.+@.+\..+/.test(val) || 'Correo no válido']" />
                         <q-input filled v-model="telefono" color="black" label="Digite su número telefónico"
                             type="number" :rules="[val => !!val || 'El teléfono es obligatorio']" />
-                        <q-input filled v-model="fecha" color="black" label="Elija la fecha en la que desea su cita" :min="minDate"
-                            type="date"  :rules="[val => !!val || 'La fecha es obligatoria', val => (val >= minDate) || 'La fecha no puede ser anterior a la de hoy.']" />
+                        <q-input filled v-model="fecha" color="black" label="Elija la fecha en la que desea su cita"
+                            :min="minDate" type="date"
+                            :rules="[val => !!val || 'La fecha es obligatoria', val => (val >= minDate) || 'La fecha no puede ser anterior a la de hoy.']" />
                     </q-form>
 
                 </q-card-section>
@@ -232,13 +232,6 @@ onMounted(async () => {
     position: relative;
     overflow: hidden;
     border-radius: 8px;
-    height: 100%;
-}
-
-.collage-image q-img {
-    object-fit: cover;
-    /* Asegura que la imagen llene el contenedor sin deformarse */
-    width: 100%;
     height: 100%;
 }
 
@@ -353,7 +346,9 @@ p {
 
 .collage-image {
     width: 220px;
-    height: 100%;
+    /* Ancho fijo */
+    height: 200px;
+    /* Alto fijo */
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -363,6 +358,16 @@ p {
 .collage-image:hover {
     transform: scale(1.05);
 }
+
+.collage-img {
+    width: 100%;
+    /* Imagen ocupa todo el ancho del contenedor */
+    height: 100%;
+    /* Imagen ocupa toda la altura del contenedor */
+    object-fit: cover;
+    /* Se asegura de que la imagen mantenga su proporción y llene el espacio */
+}
+
 
 .last-image .overlay-text {
     font-size: 1.1rem;

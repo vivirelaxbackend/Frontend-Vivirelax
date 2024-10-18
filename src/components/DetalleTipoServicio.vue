@@ -99,7 +99,7 @@ function verInformacion(idServicio) {
             <q-card v-for="(servicio, index) in serviciosPorTipo" :key="index" class="q-mb-lg service-card">
                 <!-- Image on the left, filling the entire height and 100% width -->
                 <q-img :src="servicio.galeria[0]?.url || 'https://via.placeholder.com/150'" :alt="servicio.nombre_serv"
-                    class="q-card-img" />
+                style="object-fit: cover; width: 100%; height: 320px;" />
 
                 <!-- Card content on the right -->
                 <q-card-section class="q-card-content">
@@ -240,10 +240,10 @@ function verInformacion(idServicio) {
 
 /* Imagen dentro de la tarjeta */
 .q-card-img {
+    position: relative;
     width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 10px 10px 0 0;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
 }
 
 /* Contenido de la tarjeta */

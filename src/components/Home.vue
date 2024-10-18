@@ -87,7 +87,11 @@ onMounted(async () => {
       <div class="services-container">
         <div v-for="(servicio, index) in servicios.slice(0, 4)" :key="index" class="card"
           @click="irTipoServicio(servicio.idTipoServicio)">
-          <q-img :src="servicio.galeria[0]?.url" alt="Imagen del servicio" class="card-img" />
+          <div class="container-img">
+            <q-img :src="servicio.galeria[0]?.url" alt="Imagen del servicio" class="card-img"
+              style="object-fit: cover; width: 100%; height: 300px;" />
+
+          </div>
           <div class="card-body">
             <h4>{{ servicio.nombre_serv }}</h4>
             <p>{{ servicio.descripcion.slice(0, 100) }}...</p>
@@ -98,33 +102,19 @@ onMounted(async () => {
 
     <div class="map-preview">
       <h3 class="text-center text-bold" style=" font-family: 'Poppins', sans-serif;">¿DÓNDE ESTAMOS UBICADOS?</h3>
-      <q-img
-        src="https://maps.googleapis.com/maps/api/staticmap?center=6.633022899999999%2C-73.2239148&markers=6.633022899999999%2C-73.2239148&zoom=17&size=680x200&key=AIzaSyBHEIamPaljiaFeIRJX0TknCEi84x47yfc"
-        alt="Google Maps Location" class="map-image" width="95%" @click="toggleMapModal"
-        v-tooltip="'Haz clic para obtener más detalles sobre la ubicación'" style="cursor: pointer;" />
+      <q-card-section>
+        <iframe width="90%" height="400" frameborder="0" style="border:0"
+          :src="'https://www.google.com/maps/embed/v1/place?key=AIzaSyBHEIamPaljiaFeIRJX0TknCEi84x47yfc&center=6.633022899999999%2C-73.2239148&zoom=17&q=Vivirelax'"
+          allowfullscreen>
+        </iframe>
+      </q-card-section>
 
       <!-- Name and Address -->
       <div class="flex-1">
-        <p class="text-uppercase text-bold q-mt-lg">Vivirelax</p>
+        <p class="text-uppercase text-bold q-mt-lg text-h5">Vivirelax</p>
         <p class="text-uppercase text-bold">Cra. 3 #4-67, Barichara, Santander, Colombia</p>
       </div>
     </div>
-
-    <!-- Modal with Embedded Google Map -->
-    <q-dialog v-model="showMapModal">
-      <q-card style="min-height: 400px;" full-width>
-        <q-card-section>
-          <iframe width="100%" height="400" frameborder="0" style="border:0"
-            :src="'https://www.google.com/maps/embed/v1/place?key=AIzaSyBHEIamPaljiaFeIRJX0TknCEi84x47yfc&center=6.633022899999999%2C-73.2239148&zoom=17&q=Vivirelax'"
-            allowfullscreen>
-          </iframe>
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="Cerrar" color="negative" @click="toggleMapModal" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
   </div>
 </template>
 
@@ -153,8 +143,6 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
 }
-
-
 
 .spa-title {
   font-size: 2.5rem;
@@ -211,11 +199,7 @@ onMounted(async () => {
 }
 
 /* Imagen de la tarjeta */
-.card-img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
+
 
 .card-body {
   padding: 16px;
@@ -252,9 +236,6 @@ onMounted(async () => {
 
 /* Ajustes adicionales para pantallas pequeñas */
 @media (max-width: 768px) {
-  .card-img {
-    height: 150px;
-  }
 
   .card h4 {
     font-size: 1.1rem;
@@ -273,10 +254,6 @@ onMounted(async () => {
 
   .services-section {
     padding: 10px;
-  }
-
-  .card-img {
-    height: 120px;
   }
 
   .card-body {
