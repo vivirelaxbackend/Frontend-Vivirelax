@@ -100,13 +100,12 @@ onMounted(async () => {
       <h3 class="text-center text-bold" style=" font-family: 'Poppins', sans-serif;">¿DÓNDE ESTAMOS UBICADOS?</h3>
       <q-img
         src="https://maps.googleapis.com/maps/api/staticmap?center=6.633022899999999%2C-73.2239148&markers=6.633022899999999%2C-73.2239148&zoom=17&size=680x200&key=AIzaSyBHEIamPaljiaFeIRJX0TknCEi84x47yfc"
-        alt="Google Maps Location" class="map-image" @click="toggleMapModal" style="cursor: pointer;" />
-
-      <p class="text-center q-mt-lg">Haz clic en el mapa para ver más detalles</p>
+        alt="Google Maps Location" class="map-image" width="95%" @click="toggleMapModal"
+        v-tooltip="'Haz clic para obtener más detalles sobre la ubicación'" style="cursor: pointer;" />
 
       <!-- Name and Address -->
       <div class="flex-1">
-        <p class="text-uppercase text-bold">Vivirelax</p>
+        <p class="text-uppercase text-bold q-mt-lg">Vivirelax</p>
         <p class="text-uppercase text-bold">Cra. 3 #4-67, Barichara, Santander, Colombia</p>
       </div>
     </div>
