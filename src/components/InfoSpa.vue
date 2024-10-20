@@ -86,7 +86,7 @@ onMounted(() => {
                 <q-card flat bordered v-for="(servicio, index) in servicios.slice(0, 4  )" :key="index"
                     class="service-card" @click="irTipoServicio(servicio.idTipoServicio)">
                     <q-img :src="servicio.galeria[0]?.url" alt="Imagen del servicio" class="service-img"
-                        :ratio="4 / 3" />
+                        :ratio="1 / 1" />
                     <q-card-section>
                         <h4 class="service-title">{{ servicio.nombre_serv }}</h4>
                         <p class="service-description">
