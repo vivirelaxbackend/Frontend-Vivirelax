@@ -319,9 +319,12 @@ async function subirFotosServicio(files) {
 
             data.value.galeria.push(imagenSubida);  // Guardamos la imagen en el array
             /* console.log("Imagen subida:", imagenSubida); */
+            notificar('positive', 'Imagen subida exitosamente')
+            console.log(response)
         }
     } catch (error) {
         console.error("Error al subir las fotos:", error);
+        notificar('negative', 'Error al subir la imagen');
         loadingNotify();
     }
 }

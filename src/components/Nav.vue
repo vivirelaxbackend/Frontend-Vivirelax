@@ -114,12 +114,16 @@ async function contactarnos() {
     window.open(enlaceWhatsApp, '_blank');
 }
 
-function goInstagram(){
-    window.open('https://www.instagram.com/barichara.vivirelax28/','_blank');
+function goInstagram() {
+    window.open('https://www.instagram.com/barichara.vivirelax28/', '_blank');
 }
 
-function goFacebook(){
-    window.open('https://www.facebook.com/people/Vivirelax-Barichara/pfbid0cs2KSGMwypQabjGiVoaSnCGFNu8aU169Nq6cjHdzNmmb6kSfZg6CVCJbsgmyeoMql/?mibextid=LQQJ4d','_blank');
+function goFacebook() {
+    window.open('https://www.facebook.com/people/Vivirelax-Barichara/pfbid0cs2KSGMwypQabjGiVoaSnCGFNu8aU169Nq6cjHdzNmmb6kSfZg6CVCJbsgmyeoMql/?mibextid=LQQJ4d', '_blank');
+}
+
+function goVivirelax(){
+    window.open('https://linktr.ee/vivirelax', '_blank');
 }
 
 const goTo = (page) => {
@@ -204,13 +208,16 @@ onBeforeUnmount(() => {
             <router-view />
         </q-page-container>
 
-        <q-btn v-if="!useUsuario.token" fab class="facebook-btn"
-            @click="goFacebook()">
+        <q-btn v-if="!useUsuario.token" fab class="vivirelax-btn" @click="goVivirelax()">
+            <q-img src="../assets/Vivirelax-logo3.png" style="width: 100%; height: 100%;" />
+        </q-btn>
+
+
+        <q-btn v-if="!useUsuario.token" fab class="facebook-btn" @click="goFacebook()">
             <i class="fa-brands fa-facebook fa-3x"></i>
         </q-btn>
 
-        <q-btn v-if="!useUsuario.token" fab class="instagram-btn"
-            @click="goInstagram()">
+        <q-btn v-if="!useUsuario.token" fab class="instagram-btn" @click="goInstagram()">
             <i class="fa-brands fa-instagram fa-3x"></i>
         </q-btn>
 
@@ -385,7 +392,8 @@ onBeforeUnmount(() => {
 }
 
 .facebook-btn,
-.instagram-btn {
+.instagram-btn,
+.vivirelax-btn {
     position: fixed;
     right: 20px;
     z-index: 100;
@@ -399,16 +407,24 @@ onBeforeUnmount(() => {
     align-items: center;
 }
 
+.instagram-btn {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    /* Color oficial de Instagram */
+    bottom: 80px;
+}
+
 .facebook-btn {
     background-color: #1877F2;
     /* Color oficial de Facebook */
     bottom: 140px;
 }
 
-.instagram-btn {
-    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-    /* Color oficial de Instagram */
-    bottom: 80px;
+.vivirelax-btn {
+    background-color: #f5f5dc;
+    bottom: 200px;
+    background-image: url('../assets/Vivirelax-logo3.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
 }
 
 .facebook-btn:hover {
