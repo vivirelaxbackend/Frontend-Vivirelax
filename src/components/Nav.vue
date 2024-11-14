@@ -185,8 +185,8 @@ onBeforeUnmount(() => {
                     <div class="right-side">
                         <q-btn flat label="Tour 360°" class="text-bold" color="black" style="font-size: 1.1rem;"
                             @click="router.push('/video-360')" />
-                        <q-btn v-if="!useUsuario.token" flat label="Contáctanos" class="text-bold" color="black"
-                            style="font-size: 1.1rem;" @click="abrirContactoModal" />
+                      <!--   <q-btn v-if="!useUsuario.token" flat label="Contáctanos" class="text-bold" color="black"
+                            style="font-size: 1.1rem;" @click="abrirContactoModal" /> -->
                         <q-btn v-if="useUsuario.token" flat label="Administrar servicios" class="right-btn bg-secondary"
                             id="administrarboton" @click="router.push('/panel-admin')" />
 
