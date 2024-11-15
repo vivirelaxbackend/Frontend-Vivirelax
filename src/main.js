@@ -1,22 +1,19 @@
 import { createApp } from "vue";
 import { router } from "./routes/routes.js";
 import { createPinia } from "pinia";
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import axios from "axios";
 import { Quasar, Dialog, Notify } from "quasar";
 import "@quasar/extras/material-icons/material-icons.css";
 import "quasar/src/css/index.sass";
 import App from "./App.vue";
-import FloatingVue from 'floating-vue'
-import 'floating-vue/dist/style.css'
+import FloatingVue from "floating-vue";
+import "floating-vue/dist/style.css";
 
-axios.defaults.baseURL = 'http://localhost:4500/api/'
-
-/* axios.defaults.baseURL = 'https://backend-vivirelax.onrender.com/api/' */
-
+axios.defaults.baseURL = "https://backend-vivirelax.onrender.com/api/";
 
 const pinia = createPinia();
-pinia.use(piniaPluginPersistedstate)
+pinia.use(piniaPluginPersistedstate);
 
 const myApp = createApp(App);
 
