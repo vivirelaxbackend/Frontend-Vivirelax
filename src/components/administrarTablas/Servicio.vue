@@ -399,7 +399,7 @@ onMounted(() => {
                             </q-btn>
                         </div>
                         <q-input filled v-model.number="data.precio" label="Digite el precio del servicio" color="black"
-                            :rules="[val => !!val || 'Digite el precio']" type="number" />
+                            type="number" />
                         <q-input filled v-model.trim="data.duracion"
                             label="Digite la duración del servicio (por ejemplo 30 Minutos)" color="black"
                             :rules="[val => !!val || 'Digite la duración']" />

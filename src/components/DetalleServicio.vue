@@ -165,7 +165,7 @@ onMounted(async () => {
 
                     <!-- Precio y Duración -->
                     <div class="q-mt-md" style="display: flex; gap: 20px;">
-                        <p><strong>Precio: </strong> {{ formatPrice(servicio.precio) }}</p>
+                        <p v-if="servicio.precio > 0"><strong>Precio: </strong> {{ formatPrice(servicio.precio) }}</p>
                         <p><strong>Duración: </strong> {{ servicio.duracion }}</p>
                     </div>
 

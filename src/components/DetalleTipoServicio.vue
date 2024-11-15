@@ -117,7 +117,7 @@ function verInformacion(idServicio) {
                     </div>
                     <!-- Precio y Duración -->
                     <div class="service-details">
-                        <div class="service-price">
+                        <div v-if="servicio.precio > 0" class="service-price">
                             <q-icon name="monetization_on" color="black" size="20px" />
                             {{ formatPrice(servicio.precio) }}
                         </div>
