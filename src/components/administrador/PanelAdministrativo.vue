@@ -48,10 +48,10 @@ function toggleLeftDrawer() {
                     <router-link class="router" to="/panel-admin/reserva"> <button
                             class="btn text-uppercase">Reservas</button></router-link>
                 </div>
-                <div>
+<!--                 <div>
                     <router-link class="router" to="/panel-admin/consulta"> <button
                             class="btn text-uppercase">Consultas</button></router-link>
-                </div>
+                </div> -->
             </div>
         </q-drawer>
 

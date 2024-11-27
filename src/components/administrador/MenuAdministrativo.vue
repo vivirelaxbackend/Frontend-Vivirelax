@@ -29,9 +29,9 @@ function toggleLeftDrawer() {
                 <div class="card-info text-uppercase"><router-link class="router" to="/panel-admin/reserva"><img :src="Reserva"
                             alt=""></router-link> Reservas
                 </div>
-                <div class="card-info text-uppercase"><router-link class="router" to="/panel-admin/consulta"><img :src="Consulta"
+<!--                 <div class="card-info text-uppercase"><router-link class="router" to="/panel-admin/consulta"><img :src="Consulta"
                             alt=""></router-link> Consultas
-                </div>
+                </div> -->
             </div>
             <router-view />
         </q-page-container>
